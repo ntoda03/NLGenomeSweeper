@@ -128,12 +128,12 @@ This is the annotation gff3 file based on the results of InterProScan to predict
 ### Other output files of interest
 If a protein file is provided to search for NBS-LRR genes then the script will also compute a species specific NB-ARC domain profile and consensus sequence using the candidates identified. These may be of interest and can be found in the following location. If a custom HMM profile is provided to the program then a second set of species specific NB-ARC profile and sequence will also be generated.
 
-*01_candidate_identification/proteins_pfam_search/customhmmerprofile.hmm*
+*01_candidate_identification/proteins_pfam_search/customhmmerprofile.hmm* <br>
 *01_candidate_identification/proteins_pfam_search/customhmmerprofile.fa*
 
 Species specific HMM profile and consensus sequence generated using the pfam NB-ARC hmm.
 
-*01_candidate_identification/proteins_custom_search/customhmmerprofile.hmm*
+*01_candidate_identification/proteins_custom_search/customhmmerprofile.hmm* <br>
 *01_candidate_identification/proteins_custom_search/customhmmerprofile.fa*
 
 Species specific HMM profile and consensus sequence generated using a custom NB-ARC hmm provided by the user.
