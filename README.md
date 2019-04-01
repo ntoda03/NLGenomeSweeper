@@ -42,7 +42,7 @@ Required arguments:
 Output arguments:
 
   -overwrite [T/F]      	Whether to overwrite output files if they already exist. [Default F]
-  -outdir <path>        	Set an existing output directory for program output. [Default ./NLGenomeSweeper]
+  -outdir <path>        	Set an output directory for program output. [Default ./NLGenomeSweeper]
 
 
 </pre>
@@ -71,10 +71,8 @@ Input arguments:
 
 Output arguments:
 
-  -overwrite [T/F]     		Whether to overwrite output files if they already exist. 
-								[Default F] 
-  -outdir <path>        	Set an existing output directory for program to output to. 
-								[Default ./NLGenomeSweeper] 
+  -overwrite [T/F]     		Whether to overwrite output files if they already exist. [Default F] 
+  -outdir <path>        	Set an output directory for program output. [Default ./NLGenomeSweeper] 
 
 Program control:
 
