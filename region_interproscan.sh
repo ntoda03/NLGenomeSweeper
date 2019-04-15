@@ -11,7 +11,8 @@ outputdir=$1
 cores=$2
 
 # Split the file because interproscan hangs with too many sequences
-fastasplit -f $outputdir/Candidate_sites.with_flanking.fa -o $outputdir/ -c 500
+#fastasplit -f $outputdir/Candidate_sites.with_flanking.fa -o $outputdir/ -c 500
+split_fasta_n $outputdir/Candidate_sites.with_flanking.fa 500 $outputdir/Candidate_sites.with_flanking.fa_chunk_0000
 
 # interproscan is run in the background, number of cores limits number of instances running
 for i in {000..499};

@@ -91,11 +91,13 @@ def identify_candidates_proteins(program_dir, protein, gff, hmm, outdir):
 		subprocess.run('{}/hmmer_candidates.sh {} {} {} {} {}'.format(program_dir,protein,gff,
 			hmm,outdir + search_folder + protein_custom_folder, program_dir), shell=True)
 		# Concatenate to the pfam search results
-		annotated1 = pd.read_csv(outdir + search_folder + protein_custom_folder +annotated_candidates, 
-			sep='\t',header=None)
-		annotated2 = pd.read_csv(outdir + '/Annotated_candidates.bed', sep='\t',header=None)
-		annotated = annotated1.append(annotated2, ignore_index=True).drop_duplicates()
-		annotated.to_csv(outdir + '/Annotated_candidates.bed', sep='\t', header =False, index = False )
+		#annotated1 = pd.read_csv(outdir + search_folder + protein_custom_folder +annotated_candidates, 
+		#	sep='\t',header=None)
+		#annotated2 = pd.read_csv(outdir + '/Annotated_candidates.bed', sep='\t',header=None)
+		#annotated = annotated1.append(annotated2, ignore_index=True).drop_duplicates()
+		#annotated.to_csv(outdir + '/Annotated_candidates.bed', sep='\t', header =False, index = False )
+		append_file(outdir + search_folder + protein_custom_folder + annotated_candidates, 
+			outdir + annotated_candidates)
 
 ##########################################################################
 #
