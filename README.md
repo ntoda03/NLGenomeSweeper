@@ -32,17 +32,17 @@ usage: CustomProfiler.py [-h] -verified <fasta file> -prefix <prefix>
 
 optional arguments:
 
-  -h, --help            	show this help message and exit
+  -h, --help                     show this help message and exit
 
 Required arguments:
 
-  -verified <fasta file>	A protein fasta file of known NBS-LRR genes.
-  -prefix <prefix>      	Prefix for output files. <br>
+  -verified <fasta file>                     A protein fasta file of known NBS-LRR genes.
+  -prefix <prefix>                       Prefix for output files. <br>
 
 Output arguments:
 
-  -overwrite [T/F]      	Whether to overwrite output files if they already exist. [Default F]
-  -outdir <path>        	Set an output directory for program output. [Default ./NLGenomeSweeper]
+  -overwrite [T/F]               Whether to overwrite output files if they already exist. [Default F]
+  -outdir <path>                       Set an output directory for program output. [Default ./NLGenomeSweeper]
 
 
 </pre>
@@ -56,27 +56,27 @@ usage: NLGenomeSweeper.py [-h] -genome <fasta file> [-protein <fasta file>]
 
 optional arguments:
 
-  -h, --help            	show this help message and exit
+  -h, --help                      show this help message and exit
 
 Required arguments:
 
-  -genome <fasta file>  	A genome sequence in fasta format to search.
+  -genome <fasta file>                        A genome sequence in fasta format to search.
 
 Input arguments:
 
-  -protein <fasta file>		Protein sequences in fasta format. 
-  -gff <gff3 file>      	gff3 annotation of the genome. Required if searching protein sequences. 
-  -consensus <fasta file>	Also search the genome using a custom NB-ARC consensus sequence(s).
-  -hmm <file>           	Also search the protein file using a custom NB-ARC HMM. <br>
+  -protein <fasta file>                       Protein sequences in fasta format. 
+  -gff <gff3 file>                           gff3 annotation of the genome. Required if searching protein sequences. 
+  -consensus <fasta file>                     Also search the genome using a custom NB-ARC consensus sequence(s).
+  -hmm <file>                           Also search the protein file using a custom NB-ARC HMM. <br>
 
 Output arguments:
 
-  -overwrite [T/F]     		Whether to overwrite output files if they already exist. [Default F] 
-  -outdir <path>        	Set an output directory for program output. [Default ./NLGenomeSweeper] 
+  -overwrite [T/F]                Whether to overwrite output files if they already exist. [Default F] 
+  -outdir <path>                        Set an output directory for program output. [Default ./NLGenomeSweeper] 
 
 Program control:
 
-  -t <threads>          	The number of threads to use.
+  -t <threads>                             The number of threads to use.
 
 </pre>
 ### Examples
@@ -100,6 +100,7 @@ Search using a custom HMM profile and consensus sequence:
 Here is an overview of the important output files created by the script. The files will be output by default in a folder called NLGenomeSweeper which will be created in the current working directory or else the user can specify and output location. 
 
 ### Primary output files
+#### CustomProfiler
 The primary output files of CustomProfiler will be written to the folder 00_profile_creation within the output directory.
 
 *00_profile_creation/\<prefix\>.fa*
@@ -110,7 +111,7 @@ The consensus NB-ARC domain sequence generated for the known NBS-LRR genes.
 
 The NB-ARC domain HMM profile generated for the known NBS-LRR genes.
 
-
+#### NLGenomeSweeper
 The primary output files of NLGenomeSweeper will be written to the output directory.
 
 *Annotated_candidates.bed*
