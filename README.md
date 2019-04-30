@@ -20,7 +20,6 @@ The following software must be installed and available in the path.
 * HMMER
 * InterProScan
 * R
-* Exonerate
 
 ## Using this script
 
