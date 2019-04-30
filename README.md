@@ -2,7 +2,7 @@
 Identification of NBS-LRR genes in genomic sequences
 
 ## Introduction
-NLGenomeSweeper is a command line pipeline that searches a genome for NBS-LRR genes based on the presence of the NB-ARC domain using the consensus sequence of the Pfam HMM profile (PF00931). It can be used with a custom NB-ARC HMM profile and consensus protein sequence(s) built for a species of interest or related species for greater power. It is highly recommended to use a custom consensus sequence and if possible to build a consensus sequence separately for each type of NBS-LRR (TNLs, CNLs, NLs) and combine them into a single fasta file for use. This pipeline shows high specificity for functional genes and mostly intact pseudogenes. However, candidate regions are identified but may not necessarily represent functional genes and does not itself do gene prediction. A domain identification step is also included and the output in gff3 format can be used for manual annotation of NBS-LRR genes. Therefore, it is primarily for the identification of NBS-LRR genes for a genome where either no annotation exists or a large number of genes are expected to be absent due to repeat masking and difficulties in annotation. For many genomes this is expected to be the case. 
+NLGenomeSweeper is a command line pipeline that searches a genome for NBS-LRR genes based on the presence of the NB-ARC domain using the consensus sequence of the Pfam HMM profile (PF00931). Protein sequences can also optionally be searched but it should be kept in mind that a large proportion of automatically annotated NBS-LRR genes have an incorrect structure and should be manually verified. This program can be used with a custom NB-ARC HMM profile and consensus protein sequence(s) built for a species of interest or related species for greater power. It is highly recommended to use a custom consensus sequence and if possible to build a consensus sequence separately for each type of NBS-LRR (TNLs, CNLs, NLs) and combine them into a single fasta file for use. This pipeline shows high specificity for functional genes and full length pseudogenes. However, candidate regions are identified but may not necessarily represent functional genes and does not itself do gene prediction. A domain identification step is also included and the output in gff3 format can be used for manual annotation of NBS-LRR genes. Therefore, it is primarily for the identification of NBS-LRR genes for a genome where either no annotation exists or a large number of genes are expected to be absent due to repeat masking and difficulties in annotation. For many genomes this is expected to be the case. 
 
 If you use NLGenomeSweeper for published research, please cite the paper (coming soon). Thanks!
 
@@ -64,7 +64,7 @@ Required arguments:
 
 Input arguments:
 
-  -protein <fasta file>                       Protein sequences in fasta format. 
+  -protein <fasta file>                       Protein sequences in fasta format to search. 
   -gff <gff3 file>                           gff3 annotation of the genome. Required if searching protein sequences. 
   -consensus <fasta file>                     Also search the genome using a custom NB-ARC consensus sequence(s).
   -hmm <file>                           Also search the protein file using a custom NB-ARC HMM. <br>
