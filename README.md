@@ -12,6 +12,7 @@ NLGenomeSweeper can be obtained from the [GitHub page](https://github.com/ntoda0
 ## Requirements
 The following software must be installed and available in the path.
 
+* Bash
 * Python version 3.5 or newer with Pandas
 * blast+
 * MUSCLE aligner
