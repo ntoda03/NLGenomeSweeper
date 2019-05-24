@@ -181,10 +181,8 @@ function split_fasta_n {
     awk '{print $1}' $fasta.fai > $fasta.fai.count
     total_lines=$(wc -l $fasta.fai.count |awk '{print $1}')
     ((lines_per_file = ($total_lines + $n_split - 1) / $n_split))
-    split --lines=$lines_per_file $fasta.fai.count $outputdir/$fasta.fai_chunk_ -d -a 3
+    split --lines=$lines_per_file $fasta.fai.count $fasta.fai_chunk_ -d -a 3
     for i in {000..499}; do
-        if [ -f $outputdir/$fasta.fai_chunk_0000$i ]; then
-            extract_seq $outputdir/$fasta.fai_chunk_$i $fasta ${prefix}$i
-        fi
+        extract_seq $fasta.fai_chunk_$i $fasta ${prefix}$i
     done
 }
