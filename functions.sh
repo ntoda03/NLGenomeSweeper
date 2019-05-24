@@ -183,6 +183,8 @@ function split_fasta_n {
     ((lines_per_file = ($total_lines + $n_split - 1) / $n_split))
     split --lines=$lines_per_file $fasta.fai.count $fasta.fai_chunk_ -d -a 3
     for i in {000..499}; do
-        extract_seq $fasta.fai_chunk_$i $fasta ${prefix}$i
+        if [ -f $fasta.fai_chunk_$i ]; then
+            extract_seq $fasta.fai_chunk_$i $fasta ${prefix}$i
+        fi
     done
 }
