@@ -5,10 +5,14 @@
 #
 # $1: output directory
 # $2: number of cores to use
+# $3: Directory of the program
 #
 
 outputdir=$1
 cores=$2
+programdir=$3
+
+source $programdir/functions.sh
 
 # Split the file because interproscan hangs with too many sequences
 #fastasplit -f $outputdir/Candidate_sites.with_flanking.fa -o $outputdir/ -c 500
