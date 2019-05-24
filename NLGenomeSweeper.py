@@ -176,7 +176,7 @@ def identify_candidates_genome(program_dir, genome, consensus, outdir, cores):
 # 
 ##########################################################################
 def run_interproscan(program_dir, outdir, t):
-	subprocess.run('{}/region_interproscan.sh {} {}'.format(program_dir, outdir + domain_folder, t),
+	subprocess.run('{}/region_interproscan.sh {} {} {}'.format(program_dir, outdir + domain_folder, t, program_dir),
 		shell=True)
 	shutil.copy(outdir + domain_folder + annotated_gff, 
 		outdir + annotated_gff)
