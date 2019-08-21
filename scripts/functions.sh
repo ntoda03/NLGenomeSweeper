@@ -37,6 +37,39 @@ function gff3_to_bed {
 }
 
 #
+# Merge positions from a file in format 'chr\tstart\tstop\tlength' where
+# stop is always greater than start. Posiitons will be merged if their 
+# distance is less than or equal to the max_size. Lengths will be added
+# when positions are merged.
+#
+# $1: input file, format 'chr\tstart\tstop\tlength'
+# $2: output file
+# $3: maximum gap size
+#
+function merge_exons {
+    infile=$1
+    outfile=$2
+    max_size=$3
+
+    awk -v max_size=$max_size '{
+       if ( NR == 1 ){
+            choice=1
+            last_chr=$1; last_start=$2; last_stop=$3; last_len=$4;}
+       else if ( $1==last_chr && ($2-last_stop)<=max_size ){
+            choice=2
+            last_stop=$3; last_len += $4 }
+       else { 
+            choice=3
+            print last_chr, last_start, last_stop, last_len;
+            last_chr=$1; last_start=$2; last_stop=$3; last_len=$4;
+       }
+    }
+    END {print last_chr, last_start, last_stop, last_len;} ' $infile | sed 's/ /\t/g' > $outfile
+
+}
+
+
+#
 # Extract sequences from a fasta file based on a text file of positions of the
 # format 'id' or 'id:start-stop' where id is the name of an element in the fasta file
 #
@@ -57,6 +90,31 @@ function extract_seq {
         else samtools faidx $genome $col1 >> $output
         fi
     done < $extract
+}
+
+#
+# Remove short sequences from a fasta file
+#
+# $1: fasta file
+# $2: output file
+# $3: minimum sequence length (inclusive)
+#
+function remove_smalls {
+    infile=$1
+    outfile=$2
+    cutoff=$3
+
+    samtools faidx $infile
+
+    >$infile.extract_list
+    while read chr length start l1 l2
+    do
+        if [[ "$length" -ge "$cutoff" ]]; then
+            echo $chr >> $infile.extract_list
+        fi
+    done < $infile.fai
+
+    extract_seq $infile.extract_list $infile $outfile
 }
 
 #
@@ -134,6 +192,7 @@ function process_custom_profile {
 # $1: input file, output from hmmer
 # $2: output directory
 # $3: name prefix
+# $4: format, nucl or prot
 #
 function create_custom_profile {
     input=$1
@@ -176,14 +235,32 @@ function get_flanking_regions {
     
     samtools faidx $genome
     join <( sort -k1,1 $sites) <( awk '{print $1,$2}' $genome.fai |sort -k1,1) \
-        | awk '{if($2-10000 < 0){$2=0} else{ $2=$2-10000};if($3+10000 >$4){$3=$4} else{ $3=$3+10000};printf "%s\t%s\t%s\n",$1,$2,$3}' \
-        |bedtools sort  |bedtools merge | awk '{printf "%s:%s-%s\n", $1,$2,$3}'  > $output.wflanking.txt
+        | awk '{if($2-5000 < 0){$2=0} else{ $2=$2-5000};if($3+5000 >$4){$3=$4} else{ $3=$3+5000};printf "%s\t%s\t%s\n",$1,$2,$3}' \
+        |bedtools sort | awk '{printf "%s:%s-%s\n", $1,$2,$3}'  > $output.wflanking.txt
     extract_seq $output.wflanking.txt $genome $output.with_flanking.fa
 }
 
 
 #
-# Split a fasta file into multiple fasta files
+# Split a fasta file into multiple fasta files, one sequence per file
+#
+# $1: input fasta file
+# $2: output prefix for split files
+#
+function split_fasta {
+    fasta=$1
+    prefix=$2
+
+    samtools faidx $fasta
+    i=0
+    while read pos start stop l1 l2; do
+        samtools faidx $fasta $pos >> $prefix$i
+        i=$((i+1))
+    done < $fasta.fai
+}
+
+#
+# Split a fasta file into multiple fasta files (n files)
 #
 # $1: input fasta file
 # $2: n, number of files to split into (may create fewer files if n > number of lines in file)
@@ -199,7 +276,7 @@ function split_fasta_n {
     total_lines=$(wc -l $fasta.fai.count |awk '{print $1}')
     ((lines_per_file = ($total_lines + $n_split - 1) / $n_split))
     split --lines=$lines_per_file $fasta.fai.count $fasta.fai_chunk_ -d -a 3
-    for i in {000..499}; do
+    for i in $(eval echo "{0..$n_split}"); do
         if [ -f $fasta.fai_chunk_$i ]; then
             extract_seq $fasta.fai_chunk_$i $fasta ${prefix}$i
         fi

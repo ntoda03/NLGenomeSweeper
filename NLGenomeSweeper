@@ -10,8 +10,6 @@ import shutil
 description = """
 
 Written by Nicholas Toda
-Last modified March 29, 2019
-v1.0
 
 Description:  Searches a genome for NBS-LRR genes based on the presence
 of the NB-ARC domain using the consensus sequence of the Pfam HMM profile 
@@ -26,6 +24,8 @@ For full details see: https://github.com/ntoda03/NLGenomeSweeper
 '''
 Definition of global names for files and paths
 '''
+# Main output directory
+nlg_folder = 'NLGenomeSweeper/'
 # Folder created in output dir for candidate search results
 search_folder = '01_candidate_identification/'
 # subfolder within the search folder for searching proteins with hmmer
@@ -42,12 +42,14 @@ domain_folder = '02_domain_identification/'
 
 # Location of the Pfam NB-ARC hmm profile and consensus within the program directory
 nbarc_hmm = "data/pfam_NB-ARC.hmm"
-nbarc_fa = "data/pfam_NB-ARC.fa"
+nbarc_fa = "data/combined_consensus.fa"
+profiler_file='data/Vitis_vinifera_NB-ARC_consensus.NLG_based.fa'
 
 # Output file names
 annotated_candidates = 'Annotated_candidates.bed'
-unannotated_candidates = 'Unannotated_candidates.bed'
-annotated_gff= 'All_candidates_regions.annotated.gff3'
+unannotated_candidates = 'All_candidates.bed'
+annotated_gff= 'All_candidates.gff3'
+consensus_file='Species_specific_consensus.fa'
 
 # Append the contents of an input file to an output file
 def append_file(input_file, output_file):
@@ -80,7 +82,7 @@ def append_file(input_file, output_file):
 def identify_candidates_proteins(program_dir, protein, gff, hmm, outdir):
 	# Searching using the pfam NB-ARC hmm profile
 	os.mkdir(outdir + search_folder + protein_search_folder)
-	subprocess.run('{}/hmmer_candidates.sh {} {} {} {} {}'.format(program_dir, protein, gff,
+	subprocess.run('{}/scripts/hmmer_candidates.sh {} {} {} {} {}'.format(program_dir, protein, gff,
 		program_dir + nbarc_hmm,
 		outdir + search_folder + protein_search_folder, program_dir), shell=True)
 	shutil.copy(outdir + search_folder + protein_search_folder + annotated_candidates, 
@@ -89,7 +91,7 @@ def identify_candidates_proteins(program_dir, protein, gff, hmm, outdir):
 	## Also searching using a custom hmm profile
 	if hmm: 
 		os.mkdir(outdir  + search_folder + protein_custom_folder)
-		subprocess.run('{}/hmmer_candidates.sh {} {} {} {} {}'.format(program_dir,protein,gff,
+		subprocess.run('{}/scripts/hmmer_candidates.sh {} {} {} {} {}'.format(program_dir,protein,gff,
 			hmm,outdir + search_folder + protein_custom_folder, program_dir), shell=True)
 		# Concatenate to the pfam search results
 		#annotated1 = pd.read_csv(outdir + search_folder + protein_custom_folder +annotated_candidates, 
@@ -126,6 +128,8 @@ def identify_candidates_genome(program_dir, genome, consensus, outdir, cores, in
 	os.mkdir(outdir + search_folder + genome_search_folder)
 	shutil.copy(program_dir + nbarc_fa, 
 		outdir + search_folder + genome_search_folder + 'pfam_NB-ARC.fa')
+	shutil.copy(program_dir + profiler_file,
+		outdir + search_folder + genome_search_folder + 'profiler_file.fa')
 	# Also searching using custom consensus sequence(s), add to query file
 	if consensus:
 		append_file(consensus, outdir + search_folder + genome_search_folder + 'pfam_NB-ARC.fa')
@@ -148,12 +152,17 @@ def identify_candidates_genome(program_dir, genome, consensus, outdir, cores, in
 #		shutil.copy(outdir + annotated_candidates, 
 #			outdir + search_folder + genome_search_folder + 'candiates_sites.bed')
 	# Run the genome based search
-	subprocess.run('{}/genome_search.sh {} {} {} {} {}'.format(program_dir,genome, 
+	subprocess.run('{}/scripts/genome_search.sh {} {} {} {} {}'.format(program_dir,genome, 
 		outdir + search_folder + genome_search_folder, program_dir, cores, intron_size), shell=True)
-	shutil.copy(outdir + search_folder + genome_search_folder + unannotated_candidates, 
-		outdir + unannotated_candidates)
+	#shutil.copy(outdir + search_folder + genome_search_folder + unannotated_candidates, 
+	#	outdir + unannotated_candidates)
+	shutil.copy(outdir + search_folder + genome_search_folder + consensus_file,
+		outdir + consensus_file)
 	shutil.copy(outdir + search_folder + genome_search_folder + 'Candidate_sites.with_flanking.fa', 
 		outdir + domain_folder + 'Candidate_sites.with_flanking.fa')
+	shutil.copy(outdir + search_folder + genome_search_folder + unannotated_candidates,
+		outdir + domain_folder + unannotated_candidates)
+
 
 
 ##########################################################################
@@ -176,10 +185,13 @@ def identify_candidates_genome(program_dir, genome, consensus, outdir, cores, in
 # 
 ##########################################################################
 def run_interproscan(program_dir, outdir, t):
-	subprocess.run('{}/region_interproscan.sh {} {} {}'.format(program_dir, outdir + domain_folder, t, program_dir),
+	subprocess.run('{}/scripts/region_interproscan.sh {} {} {}'.format(program_dir, outdir + domain_folder, t, program_dir),
 		shell=True)
 	shutil.copy(outdir + domain_folder + annotated_gff, 
 		outdir + annotated_gff)
+	shutil.copy(outdir + domain_folder + unannotated_candidates,
+		outdir + unannotated_candidates)
+
 
 ##########################################################################
 #
@@ -187,6 +199,9 @@ def run_interproscan(program_dir, outdir, t):
 #
 ##########################################################################
 def main(argv):
+	# Find current and program directory 
+	program_dir = os.path.dirname(os.path.realpath(__file__)).replace(' ', '\ ')
+	current_dir =  os.getcwd()
 	
 	# Parse command line arguments.
 	parser = argparse.ArgumentParser(description=description, formatter_class=argparse.RawTextHelpFormatter)
@@ -201,26 +216,25 @@ def main(argv):
 #	input_group.add_argument("-gff", metavar="<gff3 file>", type=str, default = None,
 #		help="gff3 annotation of the genome. Required if searching protein sequences.")
 	input_group.add_argument("-consensus", metavar="<fasta file>", type=str, default = None,
-		help="Also search the genome using a custom NB-ARC consensus sequence(s).")
+		help="Also search the genome using a custom NB-ARC consensus sequence(s) (optional).")
 #	input_group.add_argument("-hmm", metavar="<file>",  type=str, default = None,
 #		help="Also search the protein file using a custom NB-ARC HMM.")
 	
 	output_group = parser.add_argument_group('Output arguments')
 	output_group.add_argument("-overwrite", metavar="[T/F]",  default='F', type=str,
 		help="Whether to overwrite output files if they already exist. [Default F]")
-	output_group.add_argument("-outdir", metavar="<path>",  default='./NLGenomeSweeper', type=str,
-		help="Set an existing output directory for program output. [Default ./NLGenomeSweeper]")
+	output_group.add_argument("-outdir", metavar="<path>",  default=current_dir, type=str,
+		help="Path where output directory NLGenomeSweeper will be created. [Default ./]")
 	
 	run_group = parser.add_argument_group('Program control')
 	run_group.add_argument("-t", metavar="<threads>",  type=int, default = 1,
-		help="The number of threads to use.")
+		help="The number of threads to use. [Default 1]")
 	
-	advanced_group = parser.add_argument_group('Advanced parameters')
-	advanced_group.add_argument("-intron", metavar="<max intron size>",  type=int, default = 1000,
-		help="Maximum allowed size of intron within the NB-ARC domain. [Default 1000 bp]")
+	#advanced_group = parser.add_argument_group('Advanced parameters')
+	#advanced_group.add_argument("-intron", metavar="<max intron size>",  type=int, default = 1000,
+	#	help="Maximum allowed size of intron within the NB-ARC domain. [Default 1000 bp]")
 	
 	args = parser.parse_args()
-	program_dir = os.path.dirname(os.path.realpath(__file__)).replace(' ', '\ ')
 	
 	# Error handling. 
 	if not os.path.isfile(args.genome):
@@ -245,27 +259,26 @@ def main(argv):
 		args.outdir += '/'
 	if not program_dir.endswith('/'):
 		program_dir += '/'
-	if os.path.exists(args.outdir + search_folder) and (args.overwrite == "F"):
+	if os.path.exists(args.outdir + nlg_folder) and (args.overwrite == "F"):
 		parser.print_help()
 		raise Exception( 'ERROR: program output already exists and program is not set to overwrite!')
 	else:
-		if not os.path.exists(args.outdir):
-			os.mkdir(args.outdir)
-		if os.path.exists(args.outdir + search_folder):
-			shutil.rmtree(args.outdir + search_folder)
-		os.mkdir(args.outdir + search_folder)
-		if os.path.exists(args.outdir + domain_folder):
-			shutil.rmtree(args.outdir + domain_folder)
-		os.mkdir(args.outdir + domain_folder)
+		if os.path.exists(args.outdir + nlg_folder ):
+			shutil.rmtree(args.outdir + nlg_folder )
+		os.mkdir(args.outdir + nlg_folder)
+		os.mkdir(args.outdir + nlg_folder + search_folder)
+		os.mkdir(args.outdir + nlg_folder + domain_folder)
 	
+	print(description)
+	sys.stdout.flush()
 	# If a protein file was given to search
 ##	if args.protein:
 		# Search protein file using hmmer
 ##		identify_candidates_proteins(program_dir,args.protein, args.gff, args.hmm, args.outdir )
 	# Search the genome using blast
-	identify_candidates_genome(program_dir, args.genome, args.consensus, args.outdir, args.t, args.intron)
+	identify_candidates_genome(program_dir, args.genome, args.consensus, args.outdir + nlg_folder, args.t, 1000)
 	# Define ORFs and domains using interproscan
-	run_interproscan(program_dir, args.outdir, args.t)
+	run_interproscan(program_dir, args.outdir + nlg_folder, args.t)
 
 
 if __name__ == "__main__":

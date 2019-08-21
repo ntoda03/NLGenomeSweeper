@@ -13,7 +13,7 @@ prefix=$4
 consensus=$5
 format=$6
 
-source $programdir/functions.sh
+source $programdir/scripts/functions.sh
 
 # Blast the consensus domain sequences against the sequences to search and extract the overlapped region 
 cp $sequences $outputdir/sequences_cluster_search.fa
@@ -49,11 +49,12 @@ do
     extract_seq $file $outputdir/consensus.fa $file.fa
 	if [ $format == 'nucl' ]; then
 		(cd $outputdir && TransDecoder.LongOrfs -m 50 -t $basename.fa)
-		(cd $outputdir && TransDecoder.Predict --no_refine_starts --single_best_only -t $basename.fa)
+		(cd $outputdir && TransDecoder.Predict --no_refine_starts --single_best_only -t $basename.fa)	
 		create_custom_profile $file.fa.transdecoder.pep $outputdir $basename.profile
 	else
 		create_custom_profile $file.fa $outputdir $basename.profile
 	fi
 done
 cat $outputdir/consensus_clusters.*.profile.fa > $outputdir/consensus_clusters.fa
-perl $programdir/removesmalls.pl $outputdir/consensus_clusters.fa $outputdir/species_specific_domains.fa 200
+remove_smalls $outputdir/consensus_clusters.fa $outputdir/species_specific_domains.fa 200
+

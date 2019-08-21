@@ -15,24 +15,42 @@ programdir=$3
 source $programdir/functions.sh
 
 # Split the file because interproscan hangs with too many sequences
-#fastasplit -f $outputdir/Candidate_sites.with_flanking.fa -o $outputdir/ -c 500
 split_fasta_n $outputdir/Candidate_sites.with_flanking.fa 500 $outputdir/Candidate_sites.with_flanking.fa_chunk_0000
 
-# interproscan is run in the background, number of cores limits number of instances running
-for i in {000..499};
+flag=0
+run=0
+
+while [ $run -lt 10 -a $flag -eq 0 ]
 do
-	echo "Running $i/500"
-	if [ ! -f $outputdir/Candidate_sites_interpro.$i.gff3 ]; then
-		if [ -f $outputdir/Candidate_sites.with_flanking.fa_chunk_0000${i} ]; then
-			interproscan -appli PANTHER,Gene3D,Pfam,SMART,Coils -i $outputdir/Candidate_sites.with_flanking.fa_chunk_0000${i} \
-				-t n -o $outputdir/Candidate_sites_interpro.$i.gff3 -f GFF3 &
+	# interproscan is run in the background, number of cores limits number of instances running
+	for i in {000..499};
+	do
+		if [ ! -f $outputdir/Candidate_sites_interpro.$i.gff3 ]; then
+			if [ -f $outputdir/Candidate_sites.with_flanking.fa_chunk_0000${i} ]; then
+				echo "Running $i/500"
+				interproscan -appli PANTHER,Gene3D,Pfam,SMART,Coils -i $outputdir/Candidate_sites.with_flanking.fa_chunk_0000${i} \
+					-t n -o $outputdir/Candidate_sites_interpro.$i.gff3 -f GFF3 &
+			fi
 		fi
-	fi
-	if [ $(($((10#$i)) % $cores)) -eq $(($cores - 1)) ]; then
-		wait
-	fi
+		if [ $(($((10#$i)) % $cores)) -eq $(($cores - 1)) ]; then
+			wait
+		fi
+	done
+	wait
+
+	# Check to make sure interproscan run on all files, this can be aproblem sometimes
+	flag=1
+	run=$((run+1))
+	for i in {000..499};
+        do
+                if [ ! -f $outputdir/Candidate_sites_interpro.$i.gff3 ]; then
+                        if [ -f $outputdir/Candidate_sites.with_flanking.fa_chunk_0000${i} ]; then
+				echo "Some sequences did not execute. Retrying..."
+				flag=0
+                        fi
+                fi
+        done
 done
-wait
 
 # Combine the files, renaming domains of interest to their common names
 cat $outputdir/Candidate_sites_interpro.[0-9][0-9][0-9].gff3 | sed 's/ /__/g' | \
@@ -53,3 +71,4 @@ cat $outputdir/Candidate_sites_interpro.[0-9][0-9][0-9].gff3 | sed 's/ /__/g' | 
     $outputdir//All_candidates_regions.annotated.gff3
 
 sed -i '1s/^/##gff-version 3\n/' $outputdir/All_candidates_regions.annotated.gff3
+
