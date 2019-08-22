@@ -124,7 +124,6 @@ fi
 
 echo "Converting..." | tee -a $sdout
 # Convert gff files and filter for presence of LRRs
->$outputdir/to_delete.txt
 for i in $(eval echo "{0..$seq_num}"); do
     # Combine the files, renaming domains of interest to their common names
     cat $outputdir/Candidate_sites_interpro.$i.gff3 | sed 's/ /__/g' | \
@@ -137,32 +136,73 @@ for i in $(eval echo "{0..$seq_num}"); do
             }
             if($3!="nucleic_acid"){print $0} }' | sort -k1,1 -k 4,4 -k 5,5 |uniq |sed 's/ /\t/g' |
         sed 's/[^ \t]*Name=\|[^ \t]*ID=/Name=/g' | sed 's/;.*//g' | uniq  | \
-        sed 's/PF13855\|SM00369\|G3DSA:3.80.10.10\|Leucine-rich_repeats,_typical_\(most_populated\)_subfamily/LRR/g' | \
+        sed 's/PF07725\|SM00367\|PF13855\|SM00369\|G3DSA:3.80.10.10\|Leucine-rich_repeats,_typical_\(most_populated\)_subfamily/LRR/g' | \
         sed 's/PTHR23155[^ \t]*\|PTHR11017[^ \t]*/LRR_protein/g' | \
-        sed 's/PF01582\|TIR_domain\|TIR_domain_profile\.\|Toll_-_interleukin_1_-_resistance\|G3DSA:3.40.50.10140\|SSF52200|/TIR/g' | \
+        sed 's/SM00255\|PF01582\|TIR_domain\|TIR_domain_profile\.\|Toll_-_interleukin_1_-_resistance\|G3DSA:3.40.50.10140\|SSF52200|/TIR/g' | \
         sed 's/PTHR36766\|PF05659/RPW8/g' | sed 's/PF00931/NB-ARC/g' | uniq | sort -k 1,1 -k 6,6 -k 7,7 | \
         awk '{printf "%s\t%s\tDomain\t%s\t%s\t%s\t%s\t%s\t%s\n",$1,$2,$4,$5,$6,$7,$8,$9}' > $outputdir/annotation.$i.gff3
-    lrr_count=$(grep "Name=LRR$" $outputdir/annotation.$i.gff3 | wc -l)
-    # Check that candidates have an LRR
-    if [ "$lrr_count" -eq 0 ]; then
-        awk -v i=$((i+1)) 'NR==i {print $0}' $outputdir/All_candidates.bed >> $outputdir/to_delete.txt
-        #mv $outputdir/annotation.$i.gff3 $outputdir/annotation.$i.gff3.filtered
-    fi
 done
+
+echo "Classifying..." | tee -a $sdout
+>$outputdir/to_delete.txt
+>$outputdir/All_candidates.classified.bed
+# Get a potential structure classification for candidates
+i=0
+while read chr start stop
+do
+
+    # Check that candidates have an LRR
+    lrr_count=$(grep "Name=LRR$" $outputdir/annotation.$i.gff3 | wc -l)
+
+    strand=$(awk -v start=$((start-100)) -v stop=$((stop+100)) \
+        '(($5 >= start && $5 <= stop) || ($4 >= start && $4 <= stop)) && $9 == "Name=NB-ARC" {print $7}' $outputdir/annotation.$i.gff3 \
+        |uniq |head -n 1)
+    awk '$2!="getorf" {print $0}' $outputdir/annotation.$i.gff3 |sort -k5,5 > $outputdir/processing.tmp
+    sed -i '/LRR_protein/d' $outputdir/processing.tmp
+    if [ $strand == "-" ]; then
+        awk -v stop=$stop '$4>stop {print $0}' $outputdir/processing.tmp > $outputdir/before.tmp
+        awk -v start=$start '$5<start {print $0}' $outputdir/processing.tmp > $outputdir/after.tmp
+        before=$(head -n 1 $outputdir/before.tmp |awk -v strand=$strand '{if(strand!=$7){$9="Name=None"} print $9}' |sed 's/.*Name=//g')
+        after=$(tail -n 2 $outputdir/after.tmp |awk -v strand=$strand '{if(strand==$7 && $9=="Name=LRR"){print $9}}' |sed 's/.*Name=//g' |uniq)
+    else
+        awk -v start=$start '$5<start {print $0}' $outputdir/processing.tmp > $outputdir/before.tmp
+        awk -v stop=$stop '$4>stop {print $0}' $outputdir/processing.tmp > $outputdir/after.tmp
+        before=$(tail -n 1 $outputdir/before.tmp |awk -v strand=$strand '{if(strand!=$7){$9="Name=None"} print $9}' |sed 's/.*Name=//g')
+        after=$(head -n 2 $outputdir/after.tmp |awk -v strand=$strand '{if(strand==$7 && $9=="Name=LRR"){print $9}}' |sed 's/.*Name=//g' |uniq)        
+    fi
+    class="N"
+    if [ ! -z "$before" ]; then
+        if [ "$before" == "TIR" ]; then class="T$class"; fi
+        if [ "$before" == "Coil" ]; then class="C$class"; fi
+        if [ "$before" == "RPW8" ]; then class="R$class"; fi
+    fi
+    if [ ! -z "$after" ]; then
+        if [ "$after" == "LRR" ]; then class+="L"; fi
+    fi
+    if [ "$lrr_count" -eq 0 ]; then
+        class+=";Filtered"
+        echo -e "$chr\t$start\t$stop\t$class" >> $outputdir/to_delete.txt
+    fi
+    echo -e "$chr\t$start\t$stop\t$class" >> $outputdir/All_candidates.classified.bed
+    i=$((i+1))
+done < $outputdir/All_candidates.bed
 
 echo "Filtering for presence of LRRs..." | tee -a $sdout
 # Remove candidates with no LRR
->$outputdir/Filtered_candidates.bed
-while read line;
-do
-    sed -i "/$line/d" $outputdir/All_candidates.bed
-    cat $line >> $outputdir/Filtered_candidates.bed
-done < $outputdir/to_delete.txt
-num_found=$(wc -l < $outputdir/All_candidates.bed)
+grep "Filtered" -v $outputdir/All_candidates.classified.bed > $outputdir/Final_candidates.bed
+grep "Filtered" $outputdir/All_candidates.classified.bed >  $outputdir/Filtered_candidates.bed
+
+num_found=$(wc -l < $outputdir/Final_candidates.bed)
 echo -e "\nCandidate filtering for LRRs. $num_found final candidates found after filtering." | tee -a $sdout
+
+cp $outputdir/Final_candidates.bed $outputdir/../Final_candidates.bed
+cp $outputdir/Filtered_candidates.bed $outputdir/../Filtered_candidates.bed
+cp $outputdir/All_candidates.classified.bed $outputdir/../All_candidates.bed
 
 cat $outputdir/annotation.*.gff3 > $outputdir/All_candidates.gff3
 sed -i '1s/^/##gff-version 3\n/' $outputdir/All_candidates.gff3
+
+cp $outputdir/All_candidates.gff3 $outputdir/../All_candidates.gff3
 
 echo "
 
