@@ -146,15 +146,17 @@ for i in $(eval echo "{0..$seq_num}"); do
     # Check that candidates have an LRR
     if [ "$lrr_count" -eq 0 ]; then
         awk -v i=$((i+1)) 'NR==i {print $0}' $outputdir/All_candidates.bed >> $outputdir/to_delete.txt
-        mv $outputdir/annotation.$i.gff3 $outputdir/annotation.$i.gff3.filtered
+        #mv $outputdir/annotation.$i.gff3 $outputdir/annotation.$i.gff3.filtered
     fi
 done
 
 echo "Filtering for presence of LRRs..." | tee -a $sdout
 # Remove candidates with no LRR
+>$outputdir/Filtered_candidates.bed
 while read line;
 do
     sed -i "/$line/d" $outputdir/All_candidates.bed
+    cat $line >> $outputdir/Filtered_candidates.bed
 done < $outputdir/to_delete.txt
 num_found=$(wc -l < $outputdir/All_candidates.bed)
 echo -e "\nCandidate filtering for LRRs. $num_found final candidates found after filtering." | tee -a $sdout
