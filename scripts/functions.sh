@@ -235,7 +235,7 @@ function get_flanking_regions {
     
     samtools faidx $genome
     join <( sort -k1,1 $sites) <( awk '{print $1,$2}' $genome.fai |sort -k1,1) \
-        | awk '{if($2-5000 < 0){$2=0} else{ $2=$2-5000};if($3+5000 >$4){$3=$4} else{ $3=$3+5000};printf "%s\t%s\t%s\n",$1,$2,$3}' \
+        | awk '{if($2-10000 < 0){$2=0} else{ $2=$2-10000};if($3+10000 >$4){$3=$4} else{ $3=$3+10000};printf "%s\t%s\t%s\n",$1,$2,$3}' \
         |bedtools sort | awk '{printf "%s:%s-%s\n", $1,$2,$3}'  > $output.wflanking.txt
     extract_seq $output.wflanking.txt $genome $output.with_flanking.fa
 }

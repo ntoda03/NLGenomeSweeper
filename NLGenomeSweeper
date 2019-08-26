@@ -50,6 +50,7 @@ annotated_candidates = 'Annotated_candidates.bed'
 unannotated_candidates = 'All_candidates.bed'
 annotated_gff= 'All_candidates.gff3'
 consensus_file='Species_specific_consensus.fa'
+filter_candidates='Filtered_candidates.bed'
 
 # Append the contents of an input file to an output file
 def append_file(input_file, output_file):
@@ -187,10 +188,12 @@ def identify_candidates_genome(program_dir, genome, consensus, outdir, cores, in
 def run_interproscan(program_dir, outdir, t):
 	subprocess.run('{}/scripts/region_interproscan.sh {} {} {}'.format(program_dir, outdir + domain_folder, t, program_dir),
 		shell=True)
-	shutil.copy(outdir + domain_folder + annotated_gff, 
-		outdir + annotated_gff)
-	shutil.copy(outdir + domain_folder + unannotated_candidates,
-		outdir + unannotated_candidates)
+	#shutil.copy(outdir + domain_folder + annotated_gff, 
+	#	outdir + annotated_gff)
+	#shutil.copy(outdir + domain_folder + unannotated_candidates,
+	#	outdir + unannotated_candidates)
+	#shutil.copy(outdir + domain_folder + filter_candidates,
+	#	outdir + filter_candidates)
 
 
 ##########################################################################

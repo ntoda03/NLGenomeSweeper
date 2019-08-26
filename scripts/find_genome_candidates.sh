@@ -43,7 +43,7 @@ elif [ $format == 'nucl' ]; then
 fi
 samtools faidx $profiles
 join <(awk '{print $2,$1}' $outputdir/genome_blast2.txt |sort -k1,1 |sed 's/,len,/ /g' |uniq) <(awk '{print $1,$2}' $profiles.fai |sort -k1,1) \
-        |awk '((0.8*$4*3) < $3) {print $2}' |sed 's/:\|-/\t/g' |bedtools sort |uniq > $outputdir/$outname.bed
+        |awk '((0.8*$4*3) < $3) {print $2}' |sed -r 's/(.*:.*)-/\1\t/g' | sed 's/:/\t/g' |bedtools sort |uniq > $outputdir/$outname.bed
 awk '{printf "%s:%s-%s\n",$1,$2,$3}' $outputdir/$outname.bed > $outputdir/$outname.pos.txt
 extract_seq $outputdir/$outname.pos.txt $genome $outputdir/$outname.fa
 

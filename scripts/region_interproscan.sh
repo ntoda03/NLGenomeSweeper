@@ -157,6 +157,7 @@ do
     strand=$(awk -v start=$((start-100)) -v stop=$((stop+100)) \
         '(($5 >= start && $5 <= stop) || ($4 >= start && $4 <= stop)) && $9 == "Name=NB-ARC" {print $7}' $outputdir/annotation.$i.gff3 \
         |uniq |head -n 1)
+    if [ -z "$strand" ]; then strand="+"; fi
     awk '$2!="getorf" {print $0}' $outputdir/annotation.$i.gff3 |sort -k5,5 > $outputdir/processing.tmp
     sed -i '/LRR_protein/d' $outputdir/processing.tmp
     if [ $strand == "-" ]; then

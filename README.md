@@ -80,10 +80,19 @@ Here is an overview of the important output files created by the script. The fil
 ### Primary output files
 #### NLGenomeSweeper
 The primary output files of NLGenomeSweeper will be written to the output directory.
+Warning! A potential structural classification is given but these must be verified by manual annotation.
 
 *All_candidates.bed*
 
-This is the list of positions in the genome that were identified as probable NBS-LRR genes in bed format. Coordinates refer to the position of the NB-ARC domain and not of the potential gene.
+This is the list of positions in the genome that were identified as probable NBS-LRR genes in bed format. Coordinates refer to the position of the NB-ARC domain and not of the potential gene. A potential classification is given.
+
+*Final_candidates.bed*
+
+This is the list of positions in the genome that were identified as probable NBS-LRR genes in bed format that has passed the filter for the presence of LRRs. Coordinates refer to the position of the NB-ARC domain and not of the potential gene. A potential classification is given.
+
+*Filtered_candidates.bed*
+
+This is the list of positions in the genome that were identified as probable NBS-LRR genes in bed format but filtered out because they did not contain an LRR. Coordinates refer to the position of the NB-ARC domain and not of the potential gene. A potential classification is given.
 
 *All_candidates.gff3*
 
