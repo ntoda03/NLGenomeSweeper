@@ -3,7 +3,10 @@ Identification of NBS-LRR genes in genomic sequences
 v.1.0
 
 This was created as part of the project HealthyGrape2 at the INRA.
+
 nicholas.toda@inra.fr (out-of-date)
+
+nicholas.toda@mnhn.fr (current)
 
 ## Introduction
 NLGenomeSweeper is a command line bash pipeline that searches a genome for NBS-LRR (NLR) disease resistance 
@@ -18,7 +21,11 @@ genes. Therefore, it is primarily for the identification of NLR genes for a geno
 exists or a large number of genes are expected to be absent due to repeat masking and difficulties in annotation. 
 For many genomes this may be the case. 
 
-If you use NLGenomeSweeper for published research, please cite the paper (coming soon). Thanks!
+If you use NLGenomeSweeper for published research, please cite the paper. 
+
+Toda, N.; Rustenholz, C.; Baud, A.; Paslier, M.-C.L.; Amselem, J.; Merdinoglu, D.; Faivre-Rampant, P. [NLGenomeSweeper: A Tool for Genome-Wide NBS-LRR Resistance Gene Identification. Genes 2020, 11, 333.](https://www.mdpi.com/2073-4425/11/3/333)
+ 
+Thanks!
 
 ## Obtaining NLGenomeSweeper
 NLGenomeSweeper can be obtained from the [GitHub page](https://github.com/ntoda03/NLGenomeSweeper)
