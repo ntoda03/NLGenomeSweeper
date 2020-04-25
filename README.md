@@ -63,6 +63,7 @@ Input arguments (optional):
 
   -consensus <fasta file>                     Also search the genome using a custom NB-ARC consensus sequence(s).
                                   This is a protein fasta file of the domain sequence(s) only.
+                                  Not recommended.
 
 Output arguments (optional):
 
