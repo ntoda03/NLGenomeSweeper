@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import subprocess
 import sys
@@ -48,9 +48,12 @@ profiler_file='data/Vitis_vinifera_NB-ARC_consensus.NLG_based.fa'
 # Output file names
 annotated_candidates = 'Annotated_candidates.bed'
 unannotated_candidates = 'All_candidates.bed'
-annotated_gff= 'All_candidates.gff3'
-consensus_file='Species_specific_consensus.fa'
-filter_candidates='Filtered_candidates.bed'
+annotated_gff = 'All_candidates.gff3'
+consensus_file ='Species_specific_consensus.fa'
+filter_candidates ='Filtered_candidates.bed'
+
+# We'll look to merge domains across introns smaller than this
+max_intron_len = 1000
 
 # Append the contents of an input file to an output file
 def append_file(input_file, output_file):
@@ -62,7 +65,9 @@ def append_file(input_file, output_file):
 
 ##########################################################################
 #
-# identify_candidates_proteins
+# DEPRACATED - no protein search done
+#
+# identify_candidates_proteins 
 #
 # Arguments:
 # program_dir - directory of this program
@@ -85,7 +90,7 @@ def identify_candidates_proteins(program_dir, protein, gff, hmm, outdir):
 	os.mkdir(outdir + search_folder + protein_search_folder)
 	subprocess.run('{}/scripts/hmmer_candidates.sh {} {} {} {} {}'.format(program_dir, protein, gff,
 		program_dir + nbarc_hmm,
-		outdir + search_folder + protein_search_folder, program_dir), shell=True)
+		outdir + search_folder + protein_search_folder, program_dir), shell=True, check=True)
 	shutil.copy(outdir + search_folder + protein_search_folder + annotated_candidates, 
 		outdir + annotated_candidates)
 	
@@ -95,11 +100,6 @@ def identify_candidates_proteins(program_dir, protein, gff, hmm, outdir):
 		subprocess.run('{}/scripts/hmmer_candidates.sh {} {} {} {} {}'.format(program_dir,protein,gff,
 			hmm,outdir + search_folder + protein_custom_folder, program_dir), shell=True)
 		# Concatenate to the pfam search results
-		#annotated1 = pd.read_csv(outdir + search_folder + protein_custom_folder +annotated_candidates, 
-		#	sep='\t',header=None)
-		#annotated2 = pd.read_csv(outdir + '/Annotated_candidates.bed', sep='\t',header=None)
-		#annotated = annotated1.append(annotated2, ignore_index=True).drop_duplicates()
-		#annotated.to_csv(outdir + '/Annotated_candidates.bed', sep='\t', header =False, index = False )
 		append_file(outdir + search_folder + protein_custom_folder + annotated_candidates, 
 			outdir + annotated_candidates)
 
@@ -154,7 +154,7 @@ def identify_candidates_genome(program_dir, genome, consensus, outdir, cores, in
 #			outdir + search_folder + genome_search_folder + 'candiates_sites.bed')
 	# Run the genome based search
 	subprocess.run('{}/scripts/genome_search.sh {} {} {} {} {}'.format(program_dir,genome, 
-		outdir + search_folder + genome_search_folder, program_dir, cores, intron_size), shell=True)
+		outdir + search_folder + genome_search_folder, program_dir, cores, intron_size), shell=True, check=True)
 	#shutil.copy(outdir + search_folder + genome_search_folder + unannotated_candidates, 
 	#	outdir + unannotated_candidates)
 	shutil.copy(outdir + search_folder + genome_search_folder + consensus_file,
@@ -187,7 +187,7 @@ def identify_candidates_genome(program_dir, genome, consensus, outdir, cores, in
 ##########################################################################
 def run_interproscan(program_dir, outdir, t):
 	subprocess.run('{}/scripts/region_interproscan.sh {} {} {}'.format(program_dir, outdir + domain_folder, t, program_dir),
-		shell=True)
+		shell=True, check=True)
 	#shutil.copy(outdir + domain_folder + annotated_gff, 
 	#	outdir + annotated_gff)
 	#shutil.copy(outdir + domain_folder + unannotated_candidates,
@@ -214,12 +214,14 @@ def main(argv):
 		help="A genome sequence in fasta format to search.")
 	
 	input_group = parser.add_argument_group('Input arguments')
+# DEPRACATED - no protein search
 #	input_group.add_argument("-protein", metavar="<fasta file>",  type=str, default = None,
 #		help="Protein sequences in fasta format.")
 #	input_group.add_argument("-gff", metavar="<gff3 file>", type=str, default = None,
 #		help="gff3 annotation of the genome. Required if searching protein sequences.")
 	input_group.add_argument("-consensus", metavar="<fasta file>", type=str, default = None,
-		help="Also search the genome using a custom NB-ARC consensus sequence(s) (optional).")
+		help="Also search the genome using a custom NB-ARC consensus sequence(s) (optional)." + 
+			"It is not recommended to use this option since species specific consensuses will be created.")
 #	input_group.add_argument("-hmm", metavar="<file>",  type=str, default = None,
 #		help="Also search the protein file using a custom NB-ARC HMM.")
 	
@@ -279,7 +281,7 @@ def main(argv):
 		# Search protein file using hmmer
 ##		identify_candidates_proteins(program_dir,args.protein, args.gff, args.hmm, args.outdir )
 	# Search the genome using blast
-	identify_candidates_genome(program_dir, args.genome, args.consensus, args.outdir + nlg_folder, args.t, 1000)
+	identify_candidates_genome(program_dir, args.genome, args.consensus, args.outdir + nlg_folder, args.t, max_intron_len)
 	# Define ORFs and domains using interproscan
 	run_interproscan(program_dir, args.outdir + nlg_folder, args.t)
 

@@ -3,7 +3,23 @@
 #
 # Create custom consensus sequences based on domains desired.
 #
+# This program takes potential domains identified in the genome and compares
+# them to known high quality consnesus sequences of that domain. For each
+# potential domain the closest reference sequence if found and sequences are
+# grouped by their closest reference. The grouped sequences are aligned
+# and a protein consensus sequence is created for each group.
+# 
+# Inputs:
+# $1: Fasta file of sequences containing domain extracted from the genome
+# $2: output directory
+# $3: directory of this program
+# $4: prefix of output file
+# $5: Consensus sequences in fasta format, protein or nucleotide
+# $6: Format of the consensus sequences, 'prot' or 'nucl'
 #
+# Outputs:
+# $outputdir/$prefix.fa: Fasta file of species specific consensus sequences, proteins
+# 
 
 #hmm=$1
 sequences=$1
@@ -56,5 +72,5 @@ do
 	fi
 done
 cat $outputdir/consensus_clusters.*.profile.fa > $outputdir/consensus_clusters.fa
-remove_smalls $outputdir/consensus_clusters.fa $outputdir/species_specific_domains.fa 200
+remove_smalls $outputdir/consensus_clusters.fa $outputdir/$prefix.fa 200
 

@@ -1,7 +1,28 @@
 #!/bin/bash
 
+
 #
+# Find candidate domains in a genome with blast.
 #
+# This is a subroutine for finding blast hits of a consensus domain in 
+# a genome sequence. The hits are merged across small gaps as well as
+# introns of a custom length. Hits must span at least 80% of the
+# original domain sequence.
+# 
+# Inputs:
+# $1: genome file in fasta format to search
+# $2: output directory
+# $3: number of cores to use
+# $4: Format of the consensus sequences, 'prot' or 'nucl'
+# $5: Consensus sequences in fasta format, protein or nucleotide
+# $6: The maximum size (bp) of introns
+# $7: directory of this program
+#
+# Outputs:
+# $outputdir/$outname.fa: Fasta sequences of candidate domain found in genome
+# 
+
+
 
 genome=$1
 outputdir=$2
@@ -24,7 +45,7 @@ elif [ $format == 'nucl' ]; then
                 -evalue 1e-4 -num_threads $cores
 fi
 
-# Merge candidates within 10 bp and then combine across introns (default <500bp)
+# Merge candidates within 10 bp and then combine across introns
 awk '{if ($9>$10){tmp=$9;$9=$10;$10=tmp} print $2,$9,$10}' $outputdir/genome_blast.txt |sed 's/ /\t/g'  \
         | bedtools sort | bedtools merge -d 10 | awk '{print $1,$2,$3,$3-$2}' |sed 's/ /\t/g' > $outputdir/genome_blast.merge.txt
 merge_exons $outputdir/genome_blast.merge.txt $outputdir/genome_blast.merge2.txt $intron

@@ -1,14 +1,26 @@
 #!/bin/bash
 
 #
-# Search a genome file for NBS-LRR genes using consensus domain sequence(s).
+# Search a genome file for NBS-LRR genes using consensus domain sequence(s) of the NB-ARC domain.
 #
+# A two pass method is used. The first pass uses blast to find candidate sequences in the
+# genome based on the reference consensus sequences. These sequences are used to build
+# species specific consensus sequences for each class of NBS-LRR genes. A second
+# pass is done to identify candidate sequences using blast with the species specific consensus
+# sequences. The output is the candidate sites of the NB-ARC domains and a fasta file of
+# the sites plus 10 kb of flanking sequence for use with interproscan.
+# 
+# Inputs:
 # $1: genome file in fasta format to search
 # $2: output directory
 # $3: directory of this program
 # $4: number of cores to use
 # $5: The maximum size (bp) of introns
 #
+# Outputs:
+# $outputdir/candidate_sites.bed Location of candidate NB-ARC domain sequences found
+# $outputdir/Candidate_sites.with_flanking.fa Sequences of candidate sites extended by 10 kb
+# 
 
 genome=$1
 outputdir=$2
@@ -18,8 +30,10 @@ intron=$5
 
 source $programdir/scripts/functions.sh
 
+# Log files
 sdout=$outputdir/NLGenomeSweeper.out
 errout=$outputdir/NLGenomeSweeper.err
+# Prefix for output files
 outname="All_candidates"
 
 function exit_error {
@@ -45,15 +59,15 @@ Any problems can be submitted via the GitHub page https://github.com/ntoda03/NLG
 " | tee -a $sdout
 
 
-## Check dependencies
+## Check dependencies, exit if not found
 echo "Checking software requirements..." | tee -a $sdout
 DEPENDENCIES=(samtools bedtools blastp blastx TransDecoder.LongOrfs TransDecoder.Predict muscle interproscan hmmbuild)
 dep_flag=1
 for dependency in "${DEPENDENCIES[@]}"
 do
 	if ! which $dependency &> /dev/null; then
-    		echo "The dependency" $dependency " could not be found. Ensure that is installed and in your path." | tee -a $errout
-		depflag=0
+		echo "The dependency" $dependency " could not be found. Ensure that is installed and in your path." | tee -a $errout
+		dep_flag=0
 	fi
 done
 if [ $dep_flag -eq 0 ]; then
@@ -84,7 +98,7 @@ fi
 echo "Creating species and class specific custom sequences..." | tee -a $sdout
 mkdir -p $outputdir/profiler
 $programdir/scripts/createProfile.sh $outputdir/first_pass/$outname.fa $outputdir/profiler $programdir \
-	species_specific $outputdir/pfam_NB-ARC.fa nucl >> $sdout 2>> $errout
+	species_specific_domains $outputdir/pfam_NB-ARC.fa nucl >> $sdout 2>> $errout
 if [ -s "$outputdir/profiler/species_specific_domains.fa" ]
 then
    echo -e "Custom profiles complete.\n" | tee -a $sdout
