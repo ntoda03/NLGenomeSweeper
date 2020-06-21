@@ -31,7 +31,7 @@ Definition of global names for files and paths
 # Folder created in output dir for results
 profile_folder = '00_profile_creation'
 # Location of the Pfam NB-ARC hmm profile within the program directory
-nbarc_location = "data/pfam_NB-ARC.hmm"
+nbarc_location = "data/Vitis_vinifera_NB-ARC_consensus.fa"
 
 
 ##########################################################################
@@ -80,8 +80,8 @@ def main(argv):
 		os.mkdir(args.outdir + profile_folder)
 	
 	# Run program 
-	subprocess.run('{}/createProfile.sh {} {} {} {} {} prot'.format( program_dir, program_dir + '/' + nbarc_location, 
-		args.verified, args.outdir + profile_folder + '/', program_dir, args.prefix), shell=True)
+	subprocess.run('{}/createProfile.sh {} {} {} {} {} prot'.format( program_dir, args.verified,  
+		 args.outdir + profile_folder + '/', program_dir, args.prefix, program_dir + '/' + nbarc_location, "prot"), shell=True)
 
 if __name__ == "__main__":
    main(sys.argv[1:])
