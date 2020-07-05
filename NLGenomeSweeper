@@ -7,8 +7,12 @@ import os
 import shutil
 #import pandas as pd
 
+version="1.0.1"
+
 description = """
 
+NLGenomeSweeper 
+v$version
 Written by Nicholas Toda
 
 Description:  Searches a genome for NBS-LRR genes based on the presence

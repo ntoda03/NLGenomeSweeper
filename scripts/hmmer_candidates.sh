@@ -10,6 +10,7 @@
 # $5: directory of this program
 #
 
+# Inputs 
 proteins=$1
 gff=$2
 hmm=$3

@@ -15,6 +15,7 @@
 # $outputdir/../All_candidates.gff3: Annotation file of domains for potential NBS-LRR genes
 #
 
+# Inputs
 outputdir=$1
 cores=$2
 programdir=$3
@@ -36,32 +37,59 @@ function exit_error {
 #trap 'rv=\$?; echo "Error \$rv" >> $sdout' ERR
 #trap 'rv=\$?; echo "Exit \$rv" >> $sdout'  EXIT
 
+#
+# Check the current amount of free memory in MB.
+#
+# Input: None
+#
+# Output: The amount of free memory in MB, returned to stdout
+#
+# DO NOT PRINT ANYTHING TO STDOUT! Value is returned via stdout.
+#
 function check_mem_usage {
     local free_mem_MB=$(free --mega | awk 'NR == 2 {print $4}')
     echo $free_mem_MB
 }
 
-
+#
+# Handle a request to submit an interproscan job.
+#
+# Job will be run in the background. The job will only be run if there is no
+# existing output file and the input fasta file exists. THe job is only run
+# if there is at least 3G of RAM. This does not checks limits on threads
+# number so that should be checked before submitting.
+#
+# Input: 
+# $1: output directory
+# $2: The chunk number for the current fasta file being submitted
+#
+# Output: The ID of the Interproscan job being run, returned to stdout
+#
+# DO NOT PRINT ANYTHING TO STDOUT! Value is returned via stdout.
+# Log info is printed to STDERR
+#
 function submit_interproscan_job {
     local outputdir=$1
     local i=$2
 
+    # The return Interproscan job ID
     local running_job=0
 
     # File hasn't been run yet
     if [ ! -f $outputdir/Candidate_sites_interpro.$i.gff3 ]; then
         # The input file exists
         if [ -f $outputdir/Candidate_sites.with_flanking.fa_chunk_0000${i} ]; then
-            # Only submit new jobs if there is at meast 3G of ram free
+            # Only submit new jobs if there is at meast 3G of ram free, otherwise wait
             free_mem_MB=$(check_mem_usage)
             if [ $free_mem_MB -lt 3000 ]; then
-                echo "High memory usage. Waiting..." >> $sdout
+                echo "High memory usage. Waiting..." > >(tee -a $sdout >&2) 
                 while [ $free_mem_MB -lt 3000 ]; do
                     sleep 10
                     free_mem_MB=$(check_mem_usage)
                 done
             fi
-            echo -e "Launching $i/$file_num" >> $sdout
+            # Checks are passed, submit interproscan job
+            echo -e "Launching $i/$file_num" > >(tee -a $sdout >&2) 
             interproscan -appli PANTHER,Gene3D,Pfam,SMART,Coils -i $outputdir/Candidate_sites.with_flanking.fa_chunk_0000${i} \
                 -t n -o $outputdir/Candidate_sites_interpro.$i.gff3 -f GFF3 > $sdout.interproscan_$i 2> $errout.interproscan_$i &
             running_job=$!
@@ -72,6 +100,22 @@ function submit_interproscan_job {
     echo $running_job
 }
 
+#
+# Handle job being run in the background.
+#
+# This handles a job that have been submitted to run in the background.
+# If the job has finished or run for longer than 6400 a 1 is returned to
+# indicate that it should be removed from the list of active jobs. If it
+# Has been running for too long it will be killed.
+#
+# Input: 
+# $1: PC ID of the background job being run
+#
+# Output: A flag indicating if a process has finished/been killed (1) or not (0), returned to stdout
+#
+# DO NOT PRINT ANYTHING TO STDOUT! Value is returned via stdout.
+# Log info is printed to STDERR
+#
 function handle_bg_jobs {
     local pc_id=$1
 
@@ -81,12 +125,14 @@ function handle_bg_jobs {
     curr_runtime=$(ps -o etime= -p $pc_id | tr '-' ':' | \
         awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}')
 
-    # Process is no longer running, remove from list
+    # Process is no longer running, remove from list of current jobs
     if [ -z "$curr_status" ]; then
-        echo -e "Job complete" >> $sdout
+        echo -e "Job complete" > >(tee -a $sdout >&2) 
         remove_process=1
+    # Process has been running for too long, possible problem with interproscan, kill job
     elif [ "$curr_runtime" -gt 6400 ]; then
-        echo -e "Process with status $curr_status killed for hanging" >> $sdout
+        kill $pc_id
+        echo -e "Process with status $curr_status killed for hanging" > >(tee -a $sdout >&2) 
         remove_process=1
     fi
 
@@ -94,53 +140,89 @@ function handle_bg_jobs {
 }
 
 
+#
+# Verify whether interproscan ran succesfully.
+#
+# Check whether an output gff file was created for every input fasta file
+#  to be run with Interproscan.
+#
+# Input: 
+# $1: output directory
+# $2: total number of sequences
+#
+# Output: A flag indicating whether all files ran successfully (1) or not (0), returned to stdout
+#
+# DO NOT PRINT ANYTHING TO STDOUT! Value is returned via stdout.
+# Log info is printed to STDERR
+#
 function verify_interproscan_run {
     local outputdir=$1
     local seq_num=$2
 
     local flag=1
 
+    # Check every sequence chunk to see whether it ran
     for i in $(eval echo "{0..$seq_num}");
     do
+        # Output does not exist for chunk
         if [ ! -f $outputdir/Candidate_sites_interpro.$i.gff3 ]; then
+            # Input exists for chunk
             if [ -f $outputdir/Candidate_sites.with_flanking.fa_chunk_0000${i} ]; then
+                # Did ot run successfully
                 flag=0
-                echo -e "Problem: Candidate_sites.with_flanking.fa_chunk_0000${i} did not run." >> $sdout
+                echo -e "Problem: Candidate_sites.with_flanking.fa_chunk_0000${i} did not run." > >(tee -a $sdout >&2) 
             fi
         fi
     done
     if [ "$flag" -eq 1 ]; then
-        echo -e "Check complete. No problems." >> $sdout
+        echo -e "Check complete. No problems." > >(tee -a $sdout >&2) 
     else
-        echo -e "Some sequences did not execute. Retrying..." >> $sdout
+        echo -e "Some sequences did not execute. Retrying..." > >(tee -a $sdout >&2) 
     fi
 
     echo $flag
 }
 
 
+#
+# Run interproscan jobs.
+#
+# This handles the running and maintenance of Interproscan jobs.
+# Number of jobs running at a time is limited by threads and
+# each job must have 3G RAM free before launching.
+#
+# Input: 
+# $1: output directory
+# $2: total number of sequences
+#
+# Output: None
+#
 function run_interproscan {
     local outputdir=$1
     local seq_num=$2
+    local cores=$3
 
     flag=0
     run_cycle=0
     file_num=$seq_num
     declare -a bg_processes=()
 
+    # Potentially run multiple times if some Interproscan jobs failed
     while [[ "$run_cycle" -lt 10 && "$flag" -eq 0 ]]
     do
-        ## interproscan is run in the background, number of cores limits number of instances running
+        ## Interproscan is run in the background, number of cores limits number of instances running
         ## Although it has a multithread option, that does not take advantage of the cpus
+        ## Memory usage is really the limiting factor.
         for i in $(eval echo "{0..$seq_num}");
         do
+            # Try to submit job (function checks memory usage)
             running_job=$(submit_interproscan_job $outputdir $i)
-            if [ $running_job -ne 0 ]; then
+            if [ "$running_job" -ne 0 ]; then
                 bg_processes+=($running_job)
             fi
-            # Handle running background processes
+            # Handle running background processes, wait if reached max number of threads
             while [ "${#bg_processes[@]}" -eq "$cores" ]; do
-                echo "Reached max number of jobs. Waiting..." >> $sdout
+                echo "Reached max number of jobs. Waiting..." | tee -a $sdout
                 index_run=0
                 for pc_id in "${bg_processes[@]}"; do
                     remove_process=$(handle_bg_jobs $pc_id)
@@ -155,11 +237,11 @@ function run_interproscan {
                 fi
             done
         done
-        echo "All jobs submitted. Waiting..." >> $sdout
+        echo "All jobs submitted. Waiting..." | tee -a $sdout
         wait
 
         ## Check to make sure interproscan run on all files, this can be a problem sometimes
-        echo "Checking output files." >> $sdout
+        echo "Checking output files." | tee -a $sdout
         flag=$(verify_interproscan_run $outputdir $seq_num)
         run_cycle=$((run_cycle+1))
     done
@@ -192,6 +274,7 @@ function convert_interpro_names {
 }
 
 
+# Try to classify the structure of the NBS-LRR gens based on upstream and downstream domains
 function classify_interpro_structure {
     local outputdir=$1
 
@@ -246,15 +329,19 @@ function classify_interpro_structure {
 }
 
 
+####################################################################################
+# 
+# Main
+#
+####################################################################################
 
 
-
+# Interproscan needs at least 3MB RAM to run
 free_mem_MB=$(check_mem_usage)
 if [ $free_mem_MB -lt 3000 ]; then
-    echo "Not enough memory to run interproscan. 3G mimimum is required."
+    echo "Not enough free memory to run interproscan. 3G mimimum is required." 
     exit 1
 fi
-
 
 ## Split the file because interproscan has problems with too many sequences
 seq_num=$(grep ">" $outputdir/Candidate_sites.with_flanking.fa |wc -l)
@@ -262,9 +349,11 @@ seq_num=$(($seq_num-1))
 split_fasta $outputdir/Candidate_sites.with_flanking.fa $outputdir/Candidate_sites.with_flanking.fa_chunk_0000
 
 echo -e "\nRunning interproscan domain and ORF identification..."  | tee -a $sdout
-run_interproscan $outputdir $seq_num
+echo -e "This may take several hours."  | tee -a $sdout
+#echo -e "Current status can be found in $outputdir/NLGenomeSweeper.out"  | tee -a $sdout
+run_interproscan $outputdir $seq_num $cores
 
-# Interproscan can hang or crash randomly
+# Interproscan can hang or crash randomly, check taht it was successful
 if [ "$flag" -eq 1 ]; then
     echo -e "\n\nDomain identification complete."  | tee -a $sdout
 else

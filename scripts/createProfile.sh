@@ -21,6 +21,7 @@
 # $outputdir/$prefix.fa: Fasta file of species specific consensus sequences, proteins
 # 
 
+# Inputs
 #hmm=$1
 sequences=$1
 outputdir=$2
@@ -40,6 +41,7 @@ if [ $format == 'prot' ]; then
 elif [ $format == 'nucl' ]; then
 	tblastn -outfmt 6 -query $consensus -db $outputdir/sequences_cluster_search.fa -out $outputdir/consensus_blast.txt -evalue 1e-4
 fi
+# Handle cases one the reverse stand
 awk '{if ($9>$10){tmp=$9;$9=$10;$10=tmp} print $2,$9,$10}' $outputdir/consensus_blast.txt |sed 's/ /\t/g' | \
         bedtools sort | bedtools merge -d 50 | \
 	awk '$3 - $2 > 200 {printf "%s:%s-%s\n",$1,$2,$3}'  > $outputdir/consensus.list.txt
