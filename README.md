@@ -1,6 +1,6 @@
 # NLGenomeSweeper
 Identification of NBS-LRR genes in genomic sequences
-v.1.0
+v1.0.1
 
 This was created as part of the project HealthyGrape2 at the INRA.
 
@@ -9,12 +9,12 @@ nicholas.toda@inra.fr (out-of-date)
 nicholas.toda@mnhn.fr (current)
 
 ## Introduction
-NLGenomeSweeper is a command line bash pipeline that searches a genome for NBS-LRR (NLR) disease resistance 
+NLGenomeSweeper is a command line pipeline that searches a genome for NBS-LRR (NLR) disease resistance 
 genes based on the presence of the NB-ARC domain using the consensus sequence of the Pfam HMM profile (PF00931) 
 and class specific consensus sequences built from Vitis vinifera. This pipeline can be used with a custom 
 NB-ARC HMM consensus protein sequence(s) built for a species of interest or related species for greater power,
 separately for each type of NBS-LRR (TNLs, CNLs, NLs) and combine them into a single fasta file for use. This 
-pipeline shows high specificity for complete genes and structurall complete pseudogenes. However, candidate regions 
+pipeline shows high specificity for complete genes and structurally complete pseudogenes. However, candidate regions 
 are identified but may not necessarily represent functional genes and does not itself do gene prediction. A domain 
 identification step is also included and the output in gff3 format can be used for manual annotation of NLR 
 genes. Therefore, it is primarily for the identification of NLR genes for a genome where either no annotation 
@@ -31,7 +31,7 @@ Thanks!
 NLGenomeSweeper can be obtained from the [GitHub page](https://github.com/ntoda03/NLGenomeSweeper)
 
 ## Requirements
-This is a bash pipeline to be run on linux machines.
+This is a pipeline to be run on linux based machines.
 The following software must be available in your path.
 
 * Python version 3.5 or greater
@@ -40,7 +40,7 @@ The following software must be available in your path.
 * SAMtools
 * bedtools
 * HMMER
-* InterProScan
+* InterProScan with PANTHER database
 * TransDecoder
 
 ## Using this script
@@ -63,7 +63,7 @@ Input arguments (optional):
 
   -consensus <fasta file>                     Also search the genome using a custom NB-ARC consensus sequence(s).
                                   This is a protein fasta file of the domain sequence(s) only.
-                                  Not recommended.
+                                  NOT RECOMMENDED. Species specific consensus sequences are built by default.
 
 Output arguments (optional):
 
