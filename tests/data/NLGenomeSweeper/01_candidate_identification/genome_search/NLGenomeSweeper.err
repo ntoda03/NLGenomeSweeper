@@ -1,0 +1,224 @@
+[W::fai_insert_index] Ignoring duplicate sequence "Chr1_3645763_9442806.1.1065" at byte offset 659
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/compute_base_probs.pl consensus_clusters.NB-ARC-consensus.txt.fa 0 > /home/nick/Bureau/Projet_NT/archives/NLGenomeSweeper/tests/data/NLGenomeSweeper/01_candidate_identification/genome_search/profiler/consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder_dir/base_freqs.dat
+
+
+-first extracting base frequencies, we'll need them later.
+
+
+- extracting ORFs from transcripts.
+-total transcripts to examine: 2
+
+
+#################################
+### Done preparing long ORFs.  ###
+##################################
+
+	Use file: /home/nick/Bureau/Projet_NT/archives/NLGenomeSweeper/tests/data/NLGenomeSweeper/01_candidate_identification/genome_search/profiler/consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder_dir/longest_orfs.pep  for Pfam and/or BlastP searches to enable homology-based coding region identification.
+
+	Then, run TransDecoder.Predict for your final coding region predictions.
+
+
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/get_top_longest_fasta_entries.pl consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder_dir/longest_orfs.cds 5000 5000 > consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.top_longest_5000
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/exclude_similar_proteins.pl consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.top_longest_5000 > consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.top_longest_5000.nr
+
+	-redundancy-minimized set includes 4 / 4 = 100.00%
+
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/get_top_longest_fasta_entries.pl consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.top_longest_5000.nr 500 > consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.top_500_longest
+PCT_GC: 40.2
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/seq_n_baseprobs_to_loglikelihood_vals.pl consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.top_500_longest consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder_dir/base_freqs.dat > consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder_dir/hexamer.scores
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/score_CDS_likelihood_all_6_frames.pl consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder_dir/longest_orfs.cds consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder_dir/hexamer.scores > consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.scores
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/select_best_ORFs_per_transcript.pl --gff3_file consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder_dir/longest_orfs.gff3 --cds_scores consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.scores  --min_length_auto_accept 645  --single_best_orf  > consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.best_candidates.gff3 
+Selecting best orfs
+* Running CMD: cp consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.best_candidates.gff3 consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder.gff3
+copying output to final output file: consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder.gff3* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/gff3_file_to_bed.pl consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder.gff3 > consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder.bed
+Making bed file: consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder.bed
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/gff3_file_to_proteins.pl --gff3 consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder.gff3 --fasta consensus_clusters.NB-ARC-consensus.txt.fa  --genetic_code Universal > consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder.pep
+Making pep file: consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder.pep
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/gff3_file_to_proteins.pl --gff3 consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder.gff3 --fasta consensus_clusters.NB-ARC-consensus.txt.fa --seqType CDS  --genetic_code Universal > consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder.cds
+Making cds file: consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder.cds
+transdecoder is finished.  See output files consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder.*
+
+
+
+MUSCLE v3.8.31 by Robert C. Edgar
+
+http://www.drive5.com/muscle
+This software is donated to the public domain.
+Please cite: Edgar, R.C. Nucleic Acids Res 32(5), 1792-97.
+
+consensus_clusters.NB-ARC-conse 2 seqs, max length 275, avg  length 192
+00:00:00    23 MB(-1%)  Iter   1   33.33%  K-mer dist pass 100:00:00    23 MB(-1%)  Iter   1  100.00%  K-mer dist pass 1
+00:00:00    23 MB(-1%)  Iter   1   33.33%  K-mer dist pass 200:00:00    23 MB(-1%)  Iter   1  100.00%  K-mer dist pass 2
+00:00:00    24 MB(-1%)  Iter   1  100.00%  Align node       00:00:00    25 MB(-2%)  Iter   1  100.00%  Align node
+00:00:00    25 MB(-2%)  Iter   1   50.00%  Root alignment00:00:00    25 MB(-2%)  Iter   1  100.00%  Root alignment00:00:00    25 MB(-2%)  Iter   1  100.00%  Root alignment
+[W::fai_insert_index] Ignoring duplicate sequence "Chr1_3645763_9442806.1.1065" at byte offset 659
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/compute_base_probs.pl consensus_clusters.vvinCNL-consensus.txt.fa 0 > /home/nick/Bureau/Projet_NT/archives/NLGenomeSweeper/tests/data/NLGenomeSweeper/01_candidate_identification/genome_search/profiler/consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder_dir/base_freqs.dat
+
+
+-first extracting base frequencies, we'll need them later.
+
+
+- extracting ORFs from transcripts.
+-total transcripts to examine: 1
+
+
+#################################
+### Done preparing long ORFs.  ###
+##################################
+
+	Use file: /home/nick/Bureau/Projet_NT/archives/NLGenomeSweeper/tests/data/NLGenomeSweeper/01_candidate_identification/genome_search/profiler/consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder_dir/longest_orfs.pep  for Pfam and/or BlastP searches to enable homology-based coding region identification.
+
+	Then, run TransDecoder.Predict for your final coding region predictions.
+
+
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/get_top_longest_fasta_entries.pl consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds 5000 5000 > consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.top_longest_5000
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/exclude_similar_proteins.pl consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.top_longest_5000 > consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.top_longest_5000.nr
+
+	-redundancy-minimized set includes 2 / 2 = 100.00%
+
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/get_top_longest_fasta_entries.pl consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.top_longest_5000.nr 500 > consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.top_500_longest
+PCT_GC: 38.2
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/seq_n_baseprobs_to_loglikelihood_vals.pl consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.top_500_longest consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder_dir/base_freqs.dat > consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder_dir/hexamer.scores
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/score_CDS_likelihood_all_6_frames.pl consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder_dir/hexamer.scores > consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.scores
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/select_best_ORFs_per_transcript.pl --gff3_file consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder_dir/longest_orfs.gff3 --cds_scores consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.scores  --min_length_auto_accept 590  --single_best_orf  > consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.best_candidates.gff3 
+Selecting best orfs
+* Running CMD: cp consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.best_candidates.gff3 consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder.gff3
+copying output to final output file: consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder.gff3* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/gff3_file_to_bed.pl consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder.gff3 > consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder.bed
+Making bed file: consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder.bed
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/gff3_file_to_proteins.pl --gff3 consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder.gff3 --fasta consensus_clusters.vvinCNL-consensus.txt.fa  --genetic_code Universal > consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder.pep
+Making pep file: consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder.pep
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/gff3_file_to_proteins.pl --gff3 consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder.gff3 --fasta consensus_clusters.vvinCNL-consensus.txt.fa --seqType CDS  --genetic_code Universal > consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder.cds
+Making cds file: consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder.cds
+transdecoder is finished.  See output files consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder.*
+
+
+
+MUSCLE v3.8.31 by Robert C. Edgar
+
+http://www.drive5.com/muscle
+This software is donated to the public domain.
+Please cite: Edgar, R.C. Nucleic Acids Res 32(5), 1792-97.
+
+consensus_clusters.vvinCNL-cons 1 seqs, max length 109, avg  length 109
+[W::fai_insert_index] Ignoring duplicate sequence "Chr1_3645763_9442806.1.1065" at byte offset 659
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/compute_base_probs.pl consensus_clusters.vvinNL-consensus.txt.fa 0 > /home/nick/Bureau/Projet_NT/archives/NLGenomeSweeper/tests/data/NLGenomeSweeper/01_candidate_identification/genome_search/profiler/consensus_clusters.vvinNL-consensus.txt.fa.transdecoder_dir/base_freqs.dat
+
+
+-first extracting base frequencies, we'll need them later.
+
+
+- extracting ORFs from transcripts.
+-total transcripts to examine: 4
+
+
+#################################
+### Done preparing long ORFs.  ###
+##################################
+
+	Use file: /home/nick/Bureau/Projet_NT/archives/NLGenomeSweeper/tests/data/NLGenomeSweeper/01_candidate_identification/genome_search/profiler/consensus_clusters.vvinNL-consensus.txt.fa.transdecoder_dir/longest_orfs.pep  for Pfam and/or BlastP searches to enable homology-based coding region identification.
+
+	Then, run TransDecoder.Predict for your final coding region predictions.
+
+
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/get_top_longest_fasta_entries.pl consensus_clusters.vvinNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds 5000 5000 > consensus_clusters.vvinNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.top_longest_5000
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/exclude_similar_proteins.pl consensus_clusters.vvinNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.top_longest_5000 > consensus_clusters.vvinNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.top_longest_5000.nr
+
+	-redundancy-minimized set includes 9 / 9 = 100.00%
+
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/get_top_longest_fasta_entries.pl consensus_clusters.vvinNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.top_longest_5000.nr 500 > consensus_clusters.vvinNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.top_500_longest
+PCT_GC: 41.4
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/seq_n_baseprobs_to_loglikelihood_vals.pl consensus_clusters.vvinNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.top_500_longest consensus_clusters.vvinNL-consensus.txt.fa.transdecoder_dir/base_freqs.dat > consensus_clusters.vvinNL-consensus.txt.fa.transdecoder_dir/hexamer.scores
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/score_CDS_likelihood_all_6_frames.pl consensus_clusters.vvinNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds consensus_clusters.vvinNL-consensus.txt.fa.transdecoder_dir/hexamer.scores > consensus_clusters.vvinNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.scores
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/select_best_ORFs_per_transcript.pl --gff3_file consensus_clusters.vvinNL-consensus.txt.fa.transdecoder_dir/longest_orfs.gff3 --cds_scores consensus_clusters.vvinNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.scores  --min_length_auto_accept 645  --single_best_orf  > consensus_clusters.vvinNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.best_candidates.gff3 
+Selecting best orfs
+* Running CMD: cp consensus_clusters.vvinNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.best_candidates.gff3 consensus_clusters.vvinNL-consensus.txt.fa.transdecoder.gff3
+copying output to final output file: consensus_clusters.vvinNL-consensus.txt.fa.transdecoder.gff3* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/gff3_file_to_bed.pl consensus_clusters.vvinNL-consensus.txt.fa.transdecoder.gff3 > consensus_clusters.vvinNL-consensus.txt.fa.transdecoder.bed
+Making bed file: consensus_clusters.vvinNL-consensus.txt.fa.transdecoder.bed
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/gff3_file_to_proteins.pl --gff3 consensus_clusters.vvinNL-consensus.txt.fa.transdecoder.gff3 --fasta consensus_clusters.vvinNL-consensus.txt.fa  --genetic_code Universal > consensus_clusters.vvinNL-consensus.txt.fa.transdecoder.pep
+Making pep file: consensus_clusters.vvinNL-consensus.txt.fa.transdecoder.pep
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/gff3_file_to_proteins.pl --gff3 consensus_clusters.vvinNL-consensus.txt.fa.transdecoder.gff3 --fasta consensus_clusters.vvinNL-consensus.txt.fa --seqType CDS  --genetic_code Universal > consensus_clusters.vvinNL-consensus.txt.fa.transdecoder.cds
+Making cds file: consensus_clusters.vvinNL-consensus.txt.fa.transdecoder.cds
+transdecoder is finished.  See output files consensus_clusters.vvinNL-consensus.txt.fa.transdecoder.*
+
+
+
+MUSCLE v3.8.31 by Robert C. Edgar
+
+http://www.drive5.com/muscle
+This software is donated to the public domain.
+Please cite: Edgar, R.C. Nucleic Acids Res 32(5), 1792-97.
+
+consensus_clusters.vvinNL-conse 4 seqs, max length 279, avg  length 274
+00:00:00    23 MB(-1%)  Iter   1   10.00%  K-mer dist pass 100:00:00    23 MB(-1%)  Iter   1  100.00%  K-mer dist pass 1
+00:00:00    23 MB(-1%)  Iter   1   10.00%  K-mer dist pass 200:00:00    23 MB(-1%)  Iter   1  100.00%  K-mer dist pass 2
+00:00:00    24 MB(-1%)  Iter   1   33.33%  Align node       00:00:00    26 MB(-2%)  Iter   1   66.67%  Align node00:00:00    26 MB(-2%)  Iter   1  100.00%  Align node00:00:00    26 MB(-2%)  Iter   1  100.00%  Align node
+00:00:00    26 MB(-2%)  Iter   1   25.00%  Root alignment00:00:00    26 MB(-2%)  Iter   1   50.00%  Root alignment00:00:00    26 MB(-2%)  Iter   1   75.00%  Root alignment00:00:00    26 MB(-2%)  Iter   1  100.00%  Root alignment00:00:00    26 MB(-2%)  Iter   1  100.00%  Root alignment
+00:00:00    26 MB(-2%)  Iter   2  100.00%  Root alignment
+00:00:00    26 MB(-2%)  Iter   3   40.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   3   60.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   3   80.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   3  100.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   3  120.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   3  100.00%  Refine biparts
+00:00:00    26 MB(-2%)  Iter   4   40.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   4   60.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   4   80.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   4  100.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   4  120.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   4  100.00%  Refine biparts
+00:00:00    26 MB(-2%)  Iter   5   40.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   5   60.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   5   80.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   5  100.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   5  120.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   5  100.00%  Refine biparts
+00:00:00    26 MB(-2%)  Iter   6   40.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   6   60.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   6   80.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   6  100.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   6  120.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   6  100.00%  Refine biparts
+00:00:00    26 MB(-2%)  Iter   7   40.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   7   60.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   7   80.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   7  100.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   7  120.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   7  100.00%  Refine biparts
+00:00:00    26 MB(-2%)  Iter   8   40.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   8   60.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   8   80.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   8  100.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   8  120.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   8  100.00%  Refine biparts
+00:00:00    26 MB(-2%)  Iter   9   40.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   9   60.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   9   80.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   9  100.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   9  120.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   9  100.00%  Refine biparts
+00:00:00    26 MB(-2%)  Iter  10   40.00%  Refine biparts00:00:00    26 MB(-2%)  Iter  10   60.00%  Refine biparts00:00:00    26 MB(-2%)  Iter  10   80.00%  Refine biparts00:00:00    26 MB(-2%)  Iter  10  100.00%  Refine biparts00:00:00    26 MB(-2%)  Iter  10  120.00%  Refine biparts00:00:00    26 MB(-2%)  Iter  10  100.00%  Refine biparts
+00:00:00    26 MB(-2%)  Iter  11   40.00%  Refine biparts00:00:00    26 MB(-2%)  Iter  11   60.00%  Refine biparts00:00:00    26 MB(-2%)  Iter  11   80.00%  Refine biparts00:00:00    26 MB(-2%)  Iter  11  100.00%  Refine biparts00:00:00    26 MB(-2%)  Iter  11  120.00%  Refine biparts00:00:00    26 MB(-2%)  Iter  11  100.00%  Refine biparts
+[W::fai_insert_index] Ignoring duplicate sequence "Chr1_3645763_9442806.1.1065" at byte offset 659
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/compute_base_probs.pl consensus_clusters.vvinTNL-consensus.txt.fa 0 > /home/nick/Bureau/Projet_NT/archives/NLGenomeSweeper/tests/data/NLGenomeSweeper/01_candidate_identification/genome_search/profiler/consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder_dir/base_freqs.dat
+
+
+-first extracting base frequencies, we'll need them later.
+
+
+- extracting ORFs from transcripts.
+-total transcripts to examine: 3
+
+
+#################################
+### Done preparing long ORFs.  ###
+##################################
+
+	Use file: /home/nick/Bureau/Projet_NT/archives/NLGenomeSweeper/tests/data/NLGenomeSweeper/01_candidate_identification/genome_search/profiler/consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder_dir/longest_orfs.pep  for Pfam and/or BlastP searches to enable homology-based coding region identification.
+
+	Then, run TransDecoder.Predict for your final coding region predictions.
+
+
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/get_top_longest_fasta_entries.pl consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds 5000 5000 > consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.top_longest_5000
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/exclude_similar_proteins.pl consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.top_longest_5000 > consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.top_longest_5000.nr
+
+	-redundancy-minimized set includes 4 / 4 = 100.00%
+
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/get_top_longest_fasta_entries.pl consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.top_longest_5000.nr 500 > consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.top_500_longest
+PCT_GC: 41.6
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/seq_n_baseprobs_to_loglikelihood_vals.pl consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.top_500_longest consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder_dir/base_freqs.dat > consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder_dir/hexamer.scores
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/score_CDS_likelihood_all_6_frames.pl consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder_dir/hexamer.scores > consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.scores
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/select_best_ORFs_per_transcript.pl --gff3_file consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder_dir/longest_orfs.gff3 --cds_scores consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.scores  --min_length_auto_accept 645  --single_best_orf  > consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.best_candidates.gff3 
+Selecting best orfs
+* Running CMD: cp consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder_dir/longest_orfs.cds.best_candidates.gff3 consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder.gff3
+copying output to final output file: consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder.gff3* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/gff3_file_to_bed.pl consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder.gff3 > consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder.bed
+Making bed file: consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder.bed
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/gff3_file_to_proteins.pl --gff3 consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder.gff3 --fasta consensus_clusters.vvinTNL-consensus.txt.fa  --genetic_code Universal > consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder.pep
+Making pep file: consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder.pep
+* Running CMD: /home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/gff3_file_to_proteins.pl --gff3 consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder.gff3 --fasta consensus_clusters.vvinTNL-consensus.txt.fa --seqType CDS  --genetic_code Universal > consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder.cds
+Making cds file: consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder.cds
+transdecoder is finished.  See output files consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder.*
+
+
+
+MUSCLE v3.8.31 by Robert C. Edgar
+
+http://www.drive5.com/muscle
+This software is donated to the public domain.
+Please cite: Edgar, R.C. Nucleic Acids Res 32(5), 1792-97.
+
+consensus_clusters.vvinTNL-cons 3 seqs, max length 255, avg  length 245
+00:00:00    23 MB(-1%)  Iter   1   16.67%  K-mer dist pass 100:00:00    23 MB(-1%)  Iter   1  100.00%  K-mer dist pass 1
+00:00:00    23 MB(-1%)  Iter   1   16.67%  K-mer dist pass 200:00:00    23 MB(-1%)  Iter   1  100.00%  K-mer dist pass 2
+00:00:00    24 MB(-1%)  Iter   1   50.00%  Align node       00:00:00    25 MB(-2%)  Iter   1  100.00%  Align node00:00:00    26 MB(-2%)  Iter   1  100.00%  Align node
+00:00:00    26 MB(-2%)  Iter   1   33.33%  Root alignment00:00:00    26 MB(-2%)  Iter   1   66.67%  Root alignment00:00:00    26 MB(-2%)  Iter   1  100.00%  Root alignment00:00:00    26 MB(-2%)  Iter   1  100.00%  Root alignment
+00:00:00    26 MB(-2%)  Iter   2  100.00%  Root alignment
+00:00:00    26 MB(-2%)  Iter   3   66.67%  Refine biparts00:00:00    26 MB(-2%)  Iter   3  100.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   3  133.33%  Refine biparts00:00:00    26 MB(-2%)  Iter   3  100.00%  Refine biparts
+00:00:00    26 MB(-2%)  Iter   4   66.67%  Refine biparts00:00:00    26 MB(-2%)  Iter   4  100.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   4  133.33%  Refine biparts00:00:00    26 MB(-2%)  Iter   4  100.00%  Refine biparts
+00:00:00    26 MB(-2%)  Iter   5   66.67%  Refine biparts00:00:00    26 MB(-2%)  Iter   5  100.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   5  133.33%  Refine biparts00:00:00    26 MB(-2%)  Iter   5  100.00%  Refine biparts
+00:00:00    26 MB(-2%)  Iter   6   66.67%  Refine biparts00:00:00    26 MB(-2%)  Iter   6  100.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   6  133.33%  Refine biparts00:00:00    26 MB(-2%)  Iter   6  100.00%  Refine biparts
+00:00:00    26 MB(-2%)  Iter   7   66.67%  Refine biparts00:00:00    26 MB(-2%)  Iter   7  100.00%  Refine biparts00:00:00    26 MB(-2%)  Iter   7  133.33%  Refine biparts00:00:00    26 MB(-2%)  Iter   7  100.00%  Refine biparts

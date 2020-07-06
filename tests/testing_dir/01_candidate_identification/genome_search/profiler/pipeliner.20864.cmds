@@ -1,0 +1,1 @@
+/home/nick/Programs/TransDecoder-TransDecoder-v5.5.0/util/compute_base_probs.pl consensus_clusters.vvinCNL-consensus.txt.fa 0 > /home/nick/Bureau/Projet_NT/archives/NLGenomeSweeper/tests/testing_dir/01_candidate_identification/genome_search/profiler/consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder_dir/base_freqs.dat

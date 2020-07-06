@@ -1,0 +1,11 @@
+Chr1_3645763_9442806:1-1074,len,1073	NB-ARC-consensus	34.930	355	141	5	1059	1	21	287	1.41e-58	181
+Chr1_3645763_9442806:495678-496502,len,824	consensus_clusters.NB-ARC-consensus.txt.profile-consensus	95.273	275	13	0	1	825	1	275	0.0	531
+Chr1_3645763_9442806:499741-500577,len,836	consensus_clusters.vvinNL-consensus.txt.profile-consensus	76.642	274	64	0	16	837	1	274	1.33e-146	402
+Chr1_3645763_9442806:530472-531305,len,833	consensus_clusters.vvinNL-consensus.txt.profile-consensus	78.102	274	59	1	819	1	1	274	4.04e-162	441
+Chr1_3645763_9442806:534160-534996,len,836	consensus_clusters.vvinNL-consensus.txt.profile-consensus	74.818	274	69	0	822	1	1	274	1.09e-160	437
+Chr1_3645763_9442806:1816133-1816963,len,830	consensus_clusters.vvinNL-consensus.txt.profile-consensus	70.330	273	80	1	16	831	2	274	3.60e-139	383
+Chr1_3645763_9442806:2409368-2410132,len,764	consensus_clusters.vvinTNL-consensus.txt.profile-consensus	52.000	250	118	2	765	16	1	248	4.11e-75	219
+Chr1_3645763_9442806:2411694-2412290,len,596	vvinTNL-consensus	40.670	209	112	4	1	597	2	208	9.63e-35	113
+Chr1_3645763_9442806:2414363-2414848,len,485	consensus_clusters.vvinTNL-consensus.txt.profile-consensus	31.214	173	101	4	1	486	1	166	2.49e-25	87.4
+Chr1_3645763_9442806:5789643-5790407,len,764	consensus_clusters.vvinTNL-consensus.txt.profile-consensus	75.299	251	60	2	4	753	1	250	3.57e-100	282
+Chr1_3645763_9442806:5796280-5797038,len,758	consensus_clusters.vvinTNL-consensus.txt.profile-consensus	71.837	245	66	2	1	729	7	250	6.68e-99	279

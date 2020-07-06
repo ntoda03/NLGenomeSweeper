@@ -49,15 +49,6 @@ function format_error {
 	exit_error
 }
 
-#{
-echo "
-
-Running NLGenomeSweeper
-
-Any problems can be submitted via the GitHub page https://github.com/ntoda03/NLGenomeSweeper
-
-" | tee -a $sdout
-
 
 ## Check dependencies, exit if not found
 echo "Checking software requirements..." | tee -a $sdout

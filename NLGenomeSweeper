@@ -21,6 +21,7 @@ of the NB-ARC domain using the consensus sequence of the Pfam HMM profile
 of interest or related species for greater power. 
 
 For full details see: https://github.com/ntoda03/NLGenomeSweeper
+Please report any problems to the github page.
 
 """
 

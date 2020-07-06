@@ -1,0 +1,122 @@
+
+
+Building a new DB, current time: 07/05/2020 16:18:55
+New DB name:   /home/nick/Bureau/Projet_NT/archives/NLGenomeSweeper/tests/data/NLGenomeSweeper/01_candidate_identification/genome_search/first_pass/pfam_NB-ARC.fa
+New DB title:  tests/data/NLGenomeSweeper/01_candidate_identification/genome_search//first_pass/pfam_NB-ARC.fa
+Sequence type: Protein
+Keep MBits: T
+Maximum file size: 1000000000B
+Adding sequences from FASTA; added 5 sequences in 0.000653028 seconds.
+
+
+Building a new DB, current time: 07/05/2020 16:18:56
+New DB name:   /home/nick/Bureau/Projet_NT/archives/NLGenomeSweeper/tests/data/NLGenomeSweeper/01_candidate_identification/genome_search/first_pass/pfam_NB-ARC.fa
+New DB title:  tests/data/NLGenomeSweeper/01_candidate_identification/genome_search//first_pass/pfam_NB-ARC.fa
+Sequence type: Protein
+Deleted existing Protein BLAST database named /home/nick/Bureau/Projet_NT/archives/NLGenomeSweeper/tests/data/NLGenomeSweeper/01_candidate_identification/genome_search/first_pass/pfam_NB-ARC.fa
+Keep MBits: T
+Maximum file size: 1000000000B
+Adding sequences from FASTA; added 5 sequences in 0.000576973 seconds.
+First pass complete.
+
+Creating species and class specific custom sequences...
+
+
+Building a new DB, current time: 07/05/2020 16:18:57
+New DB name:   /home/nick/Bureau/Projet_NT/archives/NLGenomeSweeper/tests/data/NLGenomeSweeper/01_candidate_identification/genome_search/profiler/sequences_cluster_search.fa
+New DB title:  tests/data/NLGenomeSweeper/01_candidate_identification/genome_search//profiler/sequences_cluster_search.fa
+Sequence type: Nucleotide
+Keep MBits: T
+Maximum file size: 1000000000B
+Adding sequences from FASTA; added 9 sequences in 0.000721931 seconds.
+
+
+Building a new DB, current time: 07/05/2020 16:18:58
+New DB name:   /home/nick/Bureau/Projet_NT/archives/NLGenomeSweeper/tests/data/NLGenomeSweeper/01_candidate_identification/genome_search/profiler/consensus_cluster_search.fa
+New DB title:  tests/data/NLGenomeSweeper/01_candidate_identification/genome_search//profiler/consensus_cluster_search.fa
+Sequence type: Protein
+Keep MBits: T
+Maximum file size: 1000000000B
+Adding sequences from FASTA; added 5 sequences in 0.000560999 seconds.
+CMD: touch /home/nick/Bureau/Projet_NT/archives/NLGenomeSweeper/tests/data/NLGenomeSweeper/01_candidate_identification/genome_search/profiler/consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder_dir.__checkpoints_longorfs/TD.longorfs.ok
+# hmmbuild :: profile HMM construction from multiple sequence alignments
+# HMMER 3.1b2 (February 2015); http://hmmer.org/
+# Copyright (C) 2015 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# input alignment file:             tests/data/NLGenomeSweeper/01_candidate_identification/genome_search//profiler/consensus_clusters.NB-ARC-consensus.txt.fa.transdecoder.pep.muscle.clw
+# output HMM file:                  tests/data/NLGenomeSweeper/01_candidate_identification/genome_search//profiler/consensus_clusters.NB-ARC-consensus.txt.profile.hmm
+# name (the single) HMM:            consensus_clusters.NB-ARC-consensus.txt.profile
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# idx name                  nseq  alen  mlen eff_nseq re/pos description
+#---- -------------------- ----- ----- ----- -------- ------ -----------
+1     consensus_clusters.NB-ARC-consensus.txt.profile     2   282   275     0.58  0.593 
+
+# CPU time: 0.18u 0.00s 00:00:00.18 Elapsed: 00:00:00.18
+CMD: touch /home/nick/Bureau/Projet_NT/archives/NLGenomeSweeper/tests/data/NLGenomeSweeper/01_candidate_identification/genome_search/profiler/consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder_dir.__checkpoints_longorfs/TD.longorfs.ok
+# hmmbuild :: profile HMM construction from multiple sequence alignments
+# HMMER 3.1b2 (February 2015); http://hmmer.org/
+# Copyright (C) 2015 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# input alignment file:             tests/data/NLGenomeSweeper/01_candidate_identification/genome_search//profiler/consensus_clusters.vvinCNL-consensus.txt.fa.transdecoder.pep.muscle.clw
+# output HMM file:                  tests/data/NLGenomeSweeper/01_candidate_identification/genome_search//profiler/consensus_clusters.vvinCNL-consensus.txt.profile.hmm
+# name (the single) HMM:            consensus_clusters.vvinCNL-consensus.txt.profile
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# idx name                  nseq  alen  mlen eff_nseq re/pos description
+#---- -------------------- ----- ----- ----- -------- ------ -----------
+1     consensus_clusters.vvinCNL-consensus.txt.profile     1   109   109     0.37  0.590 
+
+# CPU time: 0.06u 0.00s 00:00:00.06 Elapsed: 00:00:00.06
+CMD: touch /home/nick/Bureau/Projet_NT/archives/NLGenomeSweeper/tests/data/NLGenomeSweeper/01_candidate_identification/genome_search/profiler/consensus_clusters.vvinNL-consensus.txt.fa.transdecoder_dir.__checkpoints_longorfs/TD.longorfs.ok
+# hmmbuild :: profile HMM construction from multiple sequence alignments
+# HMMER 3.1b2 (February 2015); http://hmmer.org/
+# Copyright (C) 2015 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# input alignment file:             tests/data/NLGenomeSweeper/01_candidate_identification/genome_search//profiler/consensus_clusters.vvinNL-consensus.txt.fa.transdecoder.pep.muscle.clw
+# output HMM file:                  tests/data/NLGenomeSweeper/01_candidate_identification/genome_search//profiler/consensus_clusters.vvinNL-consensus.txt.profile.hmm
+# name (the single) HMM:            consensus_clusters.vvinNL-consensus.txt.profile
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# idx name                  nseq  alen  mlen eff_nseq re/pos description
+#---- -------------------- ----- ----- ----- -------- ------ -----------
+1     consensus_clusters.vvinNL-consensus.txt.profile     4   279   274     0.51  0.591 
+
+# CPU time: 0.15u 0.00s 00:00:00.15 Elapsed: 00:00:00.16
+CMD: touch /home/nick/Bureau/Projet_NT/archives/NLGenomeSweeper/tests/data/NLGenomeSweeper/01_candidate_identification/genome_search/profiler/consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder_dir.__checkpoints_longorfs/TD.longorfs.ok
+# hmmbuild :: profile HMM construction from multiple sequence alignments
+# HMMER 3.1b2 (February 2015); http://hmmer.org/
+# Copyright (C) 2015 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# input alignment file:             tests/data/NLGenomeSweeper/01_candidate_identification/genome_search//profiler/consensus_clusters.vvinTNL-consensus.txt.fa.transdecoder.pep.muscle.clw
+# output HMM file:                  tests/data/NLGenomeSweeper/01_candidate_identification/genome_search//profiler/consensus_clusters.vvinTNL-consensus.txt.profile.hmm
+# name (the single) HMM:            consensus_clusters.vvinTNL-consensus.txt.profile
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# idx name                  nseq  alen  mlen eff_nseq re/pos description
+#---- -------------------- ----- ----- ----- -------- ------ -----------
+1     consensus_clusters.vvinTNL-consensus.txt.profile     3   259   250     0.61  0.589 
+
+# CPU time: 0.14u 0.00s 00:00:00.14 Elapsed: 00:00:00.14
+Custom profiles complete.
+
+Beginning second pass of candidate finding...
+
+
+Building a new DB, current time: 07/05/2020 16:19:03
+New DB name:   /home/nick/Bureau/Projet_NT/archives/NLGenomeSweeper/tests/data/NLGenomeSweeper/01_candidate_identification/genome_search/second_pass/pfam_NB-ARC.fa
+New DB title:  tests/data/NLGenomeSweeper/01_candidate_identification/genome_search//second_pass/pfam_NB-ARC.fa
+Sequence type: Protein
+Keep MBits: T
+Maximum file size: 1000000000B
+Adding sequences from FASTA; added 8 sequences in 0.000447035 seconds.
+Second pass complete.
+
+Extracting sequences...
+Extraction complete.
+
+Candidate search complete. 9 candidates found.
