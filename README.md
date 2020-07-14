@@ -30,7 +30,7 @@ Thanks!
 ## Obtaining NLGenomeSweeper
 NLGenomeSweeper can be obtained from the [GitHub page](https://github.com/ntoda03/NLGenomeSweeper)
 
-## Requirements
+## Requirements & Installation
 This is a bash pipeline to be run on linux machines.
 The following software must be available in your path.
 
@@ -42,6 +42,25 @@ The following software must be available in your path.
 * HMMER
 * InterProScan
 * TransDecoder
+
+Quick example commands for setting up an environment to run NLGenomeSweeper using conda and common utilities.
+
+```
+# create a new environment and install needed pacakages from conda
+conda create -n NLGenomeSweeper -c bioconda -c conda-forge \
+    python=3.6 blast muscle samtools bedtools hmmer transdecoder open-jdk
+conda activate NLGenomeSweeper
+
+# install interproscan
+wget ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.45-80.0/interproscan-5.45-80.0-64-bit.tar.gz
+tar -xzf interproscan-5.45-80.0-64-bit.tar.gz
+ln -s $(pwd)/interproscan-5.45-80.0/interproscan.sh $(dirname $(which python))/interproscan
+
+# download NLGenomeSweeper and install
+git clone https://github.com/ntoda03/NLGenomeSweeper.git
+ln -s $(pwd)/NLGenomeSweeper/NLGenomeSweeper $(dirname $(which python))/NLGenomeSweeper
+NLGenomeSweeper -h
+```
 
 ## Using this script
 
