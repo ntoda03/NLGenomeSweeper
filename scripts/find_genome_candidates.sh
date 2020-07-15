@@ -22,8 +22,7 @@
 # $outputdir/$outname.fa: Fasta sequences of candidate domain found in genome
 # 
 
-
-
+# Inputs
 genome=$1
 outputdir=$2
 cores=$3
@@ -32,6 +31,7 @@ profiles=$5
 intron=$6
 programdir=$7
 
+# Output prefix
 outname="All_candidates"
 
 source $programdir/scripts/functions.sh
@@ -45,7 +45,7 @@ elif [ $format == 'nucl' ]; then
                 -evalue 1e-4 -num_threads $cores
 fi
 
-# Merge candidates within 10 bp and then combine across introns
+# Merge candidates within 10 bp and then combine across introns and extract sequence
 awk '{if ($9>$10){tmp=$9;$9=$10;$10=tmp} print $2,$9,$10}' $outputdir/genome_blast.txt |sed 's/ /\t/g'  \
         | bedtools sort | bedtools merge -d 10 | awk '{print $1,$2,$3,$3-$2}' |sed 's/ /\t/g' > $outputdir/genome_blast.merge.txt
 merge_exons $outputdir/genome_blast.merge.txt $outputdir/genome_blast.merge2.txt $intron
@@ -66,5 +66,7 @@ samtools faidx $profiles
 join <(awk '{print $2,$1}' $outputdir/genome_blast2.txt |sort -k1,1 |sed 's/,len,/ /g' |uniq) <(awk '{print $1,$2}' $profiles.fai |sort -k1,1) \
         |awk '((0.8*$4*3) < $3) {print $2}' |sed -r 's/(.*:.*)-/\1\t/g' | sed 's/:/\t/g' |bedtools sort |uniq > $outputdir/$outname.bed
 awk '{printf "%s:%s-%s\n",$1,$2,$3}' $outputdir/$outname.bed > $outputdir/$outname.pos.txt
+
+# Extract output sequences to $outputdir/$outname.fa
 extract_seq $outputdir/$outname.pos.txt $genome $outputdir/$outname.fa
 

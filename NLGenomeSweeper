@@ -7,8 +7,11 @@ import os
 import shutil
 #import pandas as pd
 
+version="1.1.0"
 description = """
 
+NLGenomeSweeper 
+v$version
 Written by Nicholas Toda
 
 Description:  Searches a genome for NBS-LRR genes based on the presence
@@ -16,7 +19,10 @@ of the NB-ARC domain using the consensus sequence of the Pfam HMM profile
 (PF00931) and can be used with custon domain profiles built for a species 
 of interest or related species for greater power. 
 
+Details on how to use the program can be found by running the command "NLGenomeSweeper --help"
+
 For full details see: https://github.com/ntoda03/NLGenomeSweeper
+Please report any problems to the github page.
 
 """
 
@@ -65,7 +71,7 @@ def append_file(input_file, output_file):
 
 ##########################################################################
 #
-# DEPRACATED - no protein search done
+# DEPRACATED - no protein search done, only the genome search is used
 #
 # identify_candidates_proteins 
 #
@@ -134,24 +140,25 @@ def identify_candidates_genome(program_dir, genome, consensus, outdir, cores, in
 	# Also searching using custom consensus sequence(s), add to query file
 	if consensus:
 		append_file(consensus, outdir + search_folder + genome_search_folder + 'pfam_NB-ARC.fa')
+	# DEPRACATED: Protein search has been removed.
 	# Also searched a protein file so a species specific NB-ARC consensus sequence was generated  
-#	if os.path.isfile(outdir + annotated_candidates + protein_search_folder + species_consensus):
-#		append_file(outdir + annotated_candidates + protein_search_folder + species_consensus, 
-#			outdir + search_folder + genome_search_folder + 'pfam_NB-ARC.fa')
+	#if os.path.isfile(outdir + annotated_candidates + protein_search_folder + species_consensus):
+	#	append_file(outdir + annotated_candidates + protein_search_folder + species_consensus, 
+	#		outdir + search_folder + genome_search_folder + 'pfam_NB-ARC.fa')
 	# Also searched a protein file using a custom hmm so a second species specific NB-ARC 
 	# consensus sequence was generated 
-#	if os.path.isfile(outdir + annotated_candidates + protein_custom_folder + species_consensus):
-#		append_file(outdir + annotated_candidates + protein_custom_folder + species_consensus,
-#			outdir + search_folder + genome_search_folder + 'pfam_NB-ARC.fa')
+	#if os.path.isfile(outdir + annotated_candidates + protein_custom_folder + species_consensus):
+	#	append_file(outdir + annotated_candidates + protein_custom_folder + species_consensus,
+	#		outdir + search_folder + genome_search_folder + 'pfam_NB-ARC.fa')
 	# Already ran protein based search, mask genome to avoid duplication
-#	if os.path.isfile(outdir + annotated_candidates):
-#		subprocess.run('bedtools maskfasta -fi {} -fo {} -bed {}'.format(
-#			genome, outdir + search_folder + genome_search_folder + 'genome.masked.fa', 
-#			outdir + annotated_candidates), shell=True)
-#		genome = outdir + search_folder + genome_search_folder + 'genome.masked.fa'
-		# Remember to also include the annotated candidates for extracting sequences
-#		shutil.copy(outdir + annotated_candidates, 
-#			outdir + search_folder + genome_search_folder + 'candiates_sites.bed')
+	#if os.path.isfile(outdir + annotated_candidates):
+	#	subprocess.run('bedtools maskfasta -fi {} -fo {} -bed {}'.format(
+	#		genome, outdir + search_folder + genome_search_folder + 'genome.masked.fa', 
+	#		outdir + annotated_candidates), shell=True)
+	#	genome = outdir + search_folder + genome_search_folder + 'genome.masked.fa'
+	#	# Remember to also include the annotated candidates for extracting sequences
+	#	shutil.copy(outdir + annotated_candidates, 
+	#		outdir + search_folder + genome_search_folder + 'candiates_sites.bed')
 	# Run the genome based search
 	subprocess.run('{}/scripts/genome_search.sh {} {} {} {} {}'.format(program_dir,genome, 
 		outdir + search_folder + genome_search_folder, program_dir, cores, intron_size), shell=True, check=True)
@@ -188,6 +195,7 @@ def identify_candidates_genome(program_dir, genome, consensus, outdir, cores, in
 def run_interproscan(program_dir, outdir, t):
 	subprocess.run('{}/scripts/region_interproscan.sh {} {} {}'.format(program_dir, outdir + domain_folder, t, program_dir),
 		shell=True, check=True)
+	# File management handled by script now
 	#shutil.copy(outdir + domain_folder + annotated_gff, 
 	#	outdir + annotated_gff)
 	#shutil.copy(outdir + domain_folder + unannotated_candidates,
@@ -214,7 +222,7 @@ def main(argv):
 		help="A genome sequence in fasta format to search.")
 	
 	input_group = parser.add_argument_group('Input arguments')
-# DEPRACATED - no protein search
+# DEPRACATED - no protein search is available
 #	input_group.add_argument("-protein", metavar="<fasta file>",  type=str, default = None,
 #		help="Protein sequences in fasta format.")
 #	input_group.add_argument("-gff", metavar="<gff3 file>", type=str, default = None,
@@ -222,6 +230,7 @@ def main(argv):
 	input_group.add_argument("-consensus", metavar="<fasta file>", type=str, default = None,
 		help="Also search the genome using a custom NB-ARC consensus sequence(s) (optional)." + 
 			"It is not recommended to use this option since species specific consensuses will be created.")
+# DEPRACATED - no protein search is available
 #	input_group.add_argument("-hmm", metavar="<file>",  type=str, default = None,
 #		help="Also search the protein file using a custom NB-ARC HMM.")
 	
@@ -235,6 +244,7 @@ def main(argv):
 	run_group.add_argument("-t", metavar="<threads>",  type=int, default = 1,
 		help="The number of threads to use. [Default 1]")
 	
+	# This gives the user control over the max intron size allowed. Not active for simplicity
 	#advanced_group = parser.add_argument_group('Advanced parameters')
 	#advanced_group.add_argument("-intron", metavar="<max intron size>",  type=int, default = 1000,
 	#	help="Maximum allowed size of intron within the NB-ARC domain. [Default 1000 bp]")
@@ -245,6 +255,7 @@ def main(argv):
 	if not os.path.isfile(args.genome):
 		parser.print_help()
 		raise Exception( 'ERROR: genome file ' + args.genome + ' does not exist!')
+# DEPRACATED - no protein search is available
 #	if args.protein and not os.path.isfile(args.protein):
 #		parser.print_help()
 #		raise Exception( 'ERROR: protein file ' + args.protein + ' does not exist!')
@@ -257,6 +268,7 @@ def main(argv):
 	if args.consensus and not os.path.isfile(args.consensus):
 		parser.print_help()
 		raise Exception( 'ERROR: consensus file ' + args.consensus + ' does not exist!')
+# DEPRACATED - no protein search is available
 #	if args.hmm and not os.path.isfile(args.hmm):
 #		parser.print_help()
 #		raise Exception( 'ERROR: HMM file ' + args.hmm + ' does not exist!')
@@ -276,6 +288,7 @@ def main(argv):
 	
 	print(description)
 	sys.stdout.flush()
+# DEPRACATED - no protein search is available
 	# If a protein file was given to search
 ##	if args.protein:
 		# Search protein file using hmmer
