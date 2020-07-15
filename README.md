@@ -31,9 +31,9 @@ Thanks!
 NLGenomeSweeper can be obtained from the [GitHub page](https://github.com/ntoda03/NLGenomeSweeper)
 
 ## Requirements
-This is a pipeline to be run on linux based machines.
+This is a pipeline to be run on unix based machines.
 The following software must be available in your path.
-At least 3G of free memory is needed for InterProScan but more mempry is better.
+At least 3G of free memory is needed for InterProScan but more memory is better.
 
 * Python 3, version 3.5 or greater
 * blast+
