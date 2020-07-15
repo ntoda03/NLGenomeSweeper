@@ -43,7 +43,7 @@ The following software must be available in your path.
 * InterProScan
 * TransDecoder
 
-Quick example commands for setting up an environment to run NLGenomeSweeper using conda and common utilities. This requires approximately 90 gibibytes of free disk space.
+Example commands for setting up an environment to run NLGenomeSweeper using conda and common utilities. This requires approximately 90 gibibytes of free disk space.
 
 ```
 # create a new environment and install needed pacakages from conda
