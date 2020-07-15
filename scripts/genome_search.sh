@@ -119,6 +119,7 @@ cat $outputdir/first_pass/$outname.bed $outputdir/second_pass/$outname.bed | \
 awk '{printf "%s:%s-%s\n",$1,$2,$3}' $outputdir/$outname.bed > $outputdir/$outname.pos.txt
 extract_seq $outputdir/$outname.pos.txt $genome $outputdir/$outname.fa
 cp $outputdir/$outname.bed $outputdir/candidate_sites.bed
+# DEPRACATED - no protein search done, only the genome search is used
 # If a protein search was run then there are already some candidate sites	
 #cat $outputdir/Unannotated_candidates.bed >> $outputdir/candidate_sites.bed
 #cat $outputdir/candidate_sites.bed |bedtools sort |bedtools merge > $outputdir/candidate_sites.bed.tmp

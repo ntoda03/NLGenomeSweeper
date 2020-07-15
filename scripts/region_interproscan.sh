@@ -22,8 +22,6 @@ programdir=$3
 
 source $programdir/scripts/functions.sh
 source $programdir/scripts/interproscan_functions.sh
-#set -o history -o histexpand
-#set -x
 set -e
 
 sdout=$outputdir/NLGenomeSweeper.out
@@ -37,7 +35,8 @@ function exit_error {
 # Interproscan needs at least 3MB RAM to run
 free_mem_MB=$(check_mem_usage)
 if [ $free_mem_MB -lt 3000 ]; then
-    echo "Not enough free memory to run interproscan. 3G mimimum is required." 
+    echo "Not enough free memory to run interproscan. 3G mimimum is required."
+    echo "Only $free_mem_MB MB of free memery available." 
     exit 1
 fi
 
