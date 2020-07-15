@@ -56,8 +56,7 @@ wget ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.45-80.0/interproscan-5.45
 tar -xzf interproscan-5.45-80.0-64-bit.tar.gz
 ln -s $(pwd)/interproscan-5.45-80.0/interproscan.sh $(dirname $(which python))/interproscan
 wget ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/data/panther-data-14.1.tar.gz
-tar -xzf panther-data-14.1.tar.gz
-mv panther interproscan-5.45-80.0/data/
+tar -xzf panther-data-14.1.tar.gz interproscan-5.45-80.0/data/
 
 # download NLGenomeSweeper and install
 git clone https://github.com/ntoda03/NLGenomeSweeper.git
