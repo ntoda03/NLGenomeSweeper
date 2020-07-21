@@ -201,7 +201,12 @@ function run_interproscan {
             done
         done
         echo "All jobs submitted. Waiting..." | tee -a $sdout
-        wait
+        # processes don't belong to shell so can't use wait
+        for pid in ${bg_processes[*]}; do
+            while [ -e /proc/$pid ]; do
+                sleep 1
+            done
+        done
 
         ## Check to make sure interproscan run on all files, this can be a problem sometimes
         echo "Checking output files." | tee -a $sdout

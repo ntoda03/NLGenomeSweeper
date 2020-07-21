@@ -46,7 +46,7 @@ seq_num=$(($seq_num-1))
 split_fasta $outputdir/Candidate_sites.with_flanking.fa $outputdir/Candidate_sites.with_flanking.fa_chunk_0000
 
 echo -e "\nRunning interproscan domain and ORF identification..."  | tee -a $sdout
-echo -e "This may take several hours."  | tee -a $sdout
+echo -e "This may take a while."  | tee -a $sdout
 #echo -e "Current status can be found in $outputdir/NLGenomeSweeper.out"  | tee -a $sdout
 run_interproscan $outputdir $seq_num $cores
 

@@ -1,6 +1,6 @@
 # NLGenomeSweeper
 Identification of NBS-LRR genes in genomic sequences
-v1.1.0
+v1.2.0
 
 This was created as part of the project HealthyGrape2 at the INRA.
 
@@ -34,7 +34,7 @@ NLGenomeSweeper can be obtained from the [GitHub page](https://github.com/ntoda0
 ## Requirements & Installation
 This is a pipeline to be run on unix based machines.
 The following software must be available in your path.
-At least 3G of free memory is needed for InterProScan but more memory is better.
+At least 2G of free memory is needed for InterProScan but more memory is better.
 
 * Python 3, version 3.5 or greater
 * blast+
