@@ -10,8 +10,7 @@ import shutil
 description = """
 
 Written by Nicholas Toda
-Last modified March 29, 2019
-v1.0
+v1.2.2
 
 Description:  This is a helper script to create a custom HMM profile and
 consensus sequence based on high quality known NBS-LRR genes. It will
@@ -80,7 +79,7 @@ def main(argv):
 		os.mkdir(args.outdir + profile_folder)
 	
 	# Run program 
-	subprocess.run('{}/createProfile.sh {} {} {} {} {} prot'.format( program_dir, args.verified,  
+	subprocess.run('{}/scripts/createProfile.sh {} {} {} {} {} prot'.format( program_dir, args.verified,  
 		 args.outdir + profile_folder + '/', program_dir, args.prefix, program_dir + '/' + nbarc_location, "prot"), shell=True)
 
 if __name__ == "__main__":
