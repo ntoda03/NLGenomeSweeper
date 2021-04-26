@@ -192,4 +192,17 @@ test_NLRGenomeSweeper(){
     rm -R $outputdir_NLG 2> /dev/null
 }
 
+test_CustomProfiler(){
+    outputdir_profiler=$outdir/testing_dir/profiler
+    genes=$programdir/data/TAIR10_TNLs.fa
+    rm -R $outputdir_profiler 2> /dev/null
+    mkdir -p $outputdir_profiler
+    $programdir/../CustomProfiler -verified $genes -prefix tair_tnl -outdir $outputdir_profiler > /dev/null 2> /dev/null
+    assertTrue "Error: NLGenomeSweeper failed" "[ -r '$outputdir_profiler/00_profile_creation/tair_tnls.fa' ]"
+    test1=$(cat $outputdir_profiler/00_profile_creation/tair_tnls.fa)
+    test2=$(cat $programdir/data/00_profile_creation/tair_tnls.fa)
+    assertEquals "Warning: CustomProfiler output no what expected" "$test1" "$test2" 
+    rm -R $outputdir_profiler 2> /dev/null
+}
+
 . shunit2
