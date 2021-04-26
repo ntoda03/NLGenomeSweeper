@@ -150,6 +150,7 @@ Required arguments:
   -prefix <prefix>                       Prefix for output files. <br>
 
 Domain arguments:
+
   -reference_nbarc <fasta file>
                         A reference NB-ARC domain protein sequence for comparison in fasta format. [Default uses Vitis vinifera domains]
 
