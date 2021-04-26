@@ -133,7 +133,7 @@ This is the annotation gff3 file based on the results of InterProScan to predict
 
 ## Working with divergent species: CustomProfiler
 
-The main pipeline has been tested on diverse plant species with agricultural or ecological importance, but the performance may suffer if you are looking at a species that is less well studied or with a long divergence time. CustomProfiler.py is a helper script to create a custom HMM profile and consensus sequence based on high quality known NBS-LRR genes from any species. It will isolate the NB-ARC domain from a protein fasta file. It is strongly suggested that if multiple classes are available (TNL, CNL, NL) that each class is built separately and the consensus sequences aggregated into a single fasta file for use. 
+The main pipeline has been tested on diverse plant species with agricultural or ecological importance, but the performance may suffer if you are looking at a species that is less well studied and with a long divergence time relative to what has been tested. CustomProfiler.py is a helper script to create a custom HMM profile and consensus sequence based on high quality known NBS-LRR genes from any species that can then be used by the main pipeline. It will isolate the NB-ARC domain from a file containing protein sequences of NRL genes. It is strongly suggested that if multiple classes are available (TNL, CNL, RNL) that each class is built separately and the consensus sequences aggregated into a single fasta file for use. By default this uses the Vitis vinifera CNL, NL, TNL, and RNL consensus domains. If you are working with a species very distant from this then it is suggested that you use the consensus sequences from a more closely related species or if that is not available then extract the NB-ARC domain manually from a known NLR gene in a more closely related species.
 
 <pre>
 
@@ -148,6 +148,10 @@ Required arguments:
 
   -verified <fasta file>                     A fasta file containing protein sequences of known NBS-LRR genes.
   -prefix <prefix>                       Prefix for output files. <br>
+
+Domain arguments:
+  -reference_nbarc <fasta file>
+                        A reference NB-ARC domain protein sequence for comparison in fasta format. [Default uses Vitis vinifera domains]
 
 Output arguments:
 
