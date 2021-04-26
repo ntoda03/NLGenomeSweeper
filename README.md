@@ -111,7 +111,7 @@ Search using custom consensus sequences:
 Here is an overview of the important output files created by the script. The files will be output by default in a folder called NLGenomeSweeper which will be created in the current working directory or else the user can specify and output location. 
 
 ### Primary output files
-#### NLGenomeSweeper
+
 The primary output files of NLGenomeSweeper will be written to the output directory.
 Warning! A potential structural classification is given but these must be verified by manual annotation.
 
@@ -131,3 +131,45 @@ This is the list of positions in the genome that were identified as probable NBS
 
 This is the annotation gff3 file based on the results of InterProScan to predicts domains and ORFs in the at the positions of predicted NBS-LRR genes. 
 
+## Working with divergent species: CustomProfiler
+
+The main pipeline has been tested on diverse plant species with agricultural or ecological importance, but the performance may suffer if you are looking at a species that is less well studied or with a long divergence time. CustomProfiler.py is a helper script to create a custom HMM profile and consensus sequence based on high quality known NBS-LRR genes from any species. It will isolate the NB-ARC domain from a protein fasta file. It is strongly suggested that if multiple classes are available (TNL, CNL, NL) that each class is built separately and the consensus sequences aggregated into a single fasta file for use. 
+
+<pre>
+
+usage: CustomProfiler.py [-h] -verified <fasta file> -prefix <prefix>
+                         [-overwrite [T/F]] [-outdir <path>]
+
+optional arguments:
+
+  -h, --help                     show this help message and exit
+
+Required arguments:
+
+  -verified <fasta file>                     A fasta file containing protein sequences of known NBS-LRR genes.
+  -prefix <prefix>                       Prefix for output files. <br>
+
+Output arguments:
+
+  -overwrite [T/F]               Whether to overwrite output files if they already exist. [Default F]
+  -outdir <path>                       Set an output directory for program output. [Default ./NLGenomeSweeper]
+
+
+</pre>
+
+### Examples
+Generate a custom HMM profile and consensus sequence:
+
+*python CustomProfiler.py -verified vvinifera_TNLgenes.fa -prefix VvinTNL*
+
+
+### Primary output files
+The primary output files of CustomProfiler will be written to the folder 00_profile_creation within the output directory.
+
+*00_profile_creation/\<prefix\>.fa*
+
+The consensus NB-ARC domain sequence generated for the known NBS-LRR genes.
+
+*00_profile_creation/\<prefix\>.hmm*
+
+The NB-ARC domain HMM profile generated for the known NBS-LRR genes.
