@@ -50,7 +50,7 @@ def main(argv):
     consensus_group = parser.add_argument_group('Domain arguments')
     consensus_group.add_argument("-reference_nbarc", metavar="<fasta file>",  
         default=program_dir + '/' + 'data/Vitis_vinifera_NB-ARC_consensus.fa', type=str,
-        help="A reference NB-ARC domain protein sequence for comparison in fasta format. [Default uses Vitis vinifera domains]")
+        help="A reference NB-ARC domain protein sequence for comparison in fasta format. [Default data/Vitis_vinifera_NB-ARC_consensus.fa]")
 
     output_group = parser.add_argument_group('Output arguments')
     output_group.add_argument("-overwrite", metavar="[T/F]",  default='F', type=str,
