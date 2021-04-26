@@ -50,6 +50,13 @@ awk '{if ($9>$10){tmp=$9;$9=$10;$10=tmp} print $2,$9,$10}' $outputdir/genome_bla
         | bedtools sort | bedtools merge -d 10 | awk '{print $1,$2,$3,$3-$2}' |sed 's/ /\t/g' > $outputdir/genome_blast.merge.txt
 merge_exons $outputdir/genome_blast.merge.txt $outputdir/genome_blast.merge2.txt $intron
 awk '{printf "%s:%s-%s %s:%s-%s,len,%s\n",$1,$2,$3,$1,$2,$3,$4}' $outputdir/genome_blast.merge2.txt > $outputdir/genome_blast.merge_pos.txt
+
+if [ ! -s "$outputdir/genome_blast.merge_pos.txt" ]
+then 
+    echo "Error: No candidates were found. Verify input sequences or consider creating a cutsom profile."
+    exit 1
+fi
+
 extract_seq $outputdir/genome_blast.merge_pos.txt $genome $outputdir/genome_blast.merge.fa
 
 # Hit must be >80% the length of the closest NB-ARC sequence
