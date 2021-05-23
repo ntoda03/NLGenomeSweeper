@@ -10,7 +10,9 @@
 # DO NOT PRINT ANYTHING TO STDOUT! Value is returned via stdout.
 #
 function check_mem_usage {
-    local free_mem_MB=$(free --mega | awk 'NR == 2 {print $4}')
+    local free_mem_KB=$(cat /proc/meminfo | awk '$1 == "MemFree:" {print $2}')
+    divby=1000
+    local free_mem_MB=$((free_mem_KB / 1000))
     echo $free_mem_MB
 }
 

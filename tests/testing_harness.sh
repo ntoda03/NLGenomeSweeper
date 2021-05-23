@@ -167,7 +167,7 @@ test_region_interproscan(){
     outputdir_interpro=$outdir/testing_dir/02_domain_identification
     rm -R $outputdir_interpro 2> /dev/null
     mkdir -p $outputdir_interpro
-    cp $programdir/data/02_domain_identification/Candidate_sites.with_flanking_4.fa $outputdir_interpro/Candidate_sites.with_flanking.fa
+    cp $programdir/data/02_domain_identification/Candidate_sites.with_flanking.fa $outputdir_interpro/Candidate_sites.with_flanking.fa
     $programdir/../scripts/region_interproscan.sh  $outputdir_interpro 2 $programdir/../ > /dev/null 2> /dev/null
     assertTrue "Error: region_interproscan failed" "[ -r '$outputdir_interpro/All_candidates.gff3' ]"
     #test1=$(cat $outputdir_interpro/All_candidates.gff3)
@@ -181,7 +181,7 @@ test_region_interproscan(){
 
 test_NLRGenomeSweeper(){
     outputdir_NLG=$outdir/testing_dir/NLG
-    genome=$programdir/data/02_domain_identification/Candidate_sites.with_flanking_4.fa
+    genome=$programdir/data/02_domain_identification/Candidate_sites.with_flanking.fa
     rm -R $outputdir_NLG 2> /dev/null
     mkdir -p $outputdir_NLG
     $programdir/../NLGenomeSweeper -genome $genome -outdir $outputdir_NLG -t 2 > /dev/null 2> /dev/null
