@@ -50,7 +50,7 @@ Example commands for setting up an environment to run NLGenomeSweeper using cond
 ```
 # create a new environment and install needed pacakages from conda
 conda create -y -n NLGenomeSweeper -c bioconda -c conda-forge \
-    python=3.6 blast muscle samtools bedtools hmmer transdecoder openjdk
+    python=3.6 blast muscle=3.8.1551 samtools bedtools hmmer transdecoder openjdk
 conda activate NLGenomeSweeper
 
 # install interproscan with Panther
