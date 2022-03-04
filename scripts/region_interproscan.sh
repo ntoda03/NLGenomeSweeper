@@ -42,8 +42,9 @@ fi
 
 ## Split the file because interproscan has problems with too many sequences
 seq_num=$(grep ">" $outputdir/Candidate_sites.with_flanking.fa |wc -l)
+seq_num=$(($seq_num-1))
 
-if [ "$seq_num" -eq "0" ]; then
+if [ "$seq_num" -eq "-1" ]; then
 	echo "No candidates found." | tee -a $sdout
 	touch $outputdir/../All_candidates.gff3 $outputdir/../All_candidates.bed 
 	touch $outputdir/../Final_candidates.bed $outputdir/../Filtered_candidates.bed
