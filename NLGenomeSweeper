@@ -10,7 +10,7 @@ import shutil
 description = """
 
 NLGenomeSweeper 
-v1.2.3
+v1.2.4
 Written by Nicholas Toda
 
 Description:  Searches a genome for NBS-LRR genes based on the presence
