@@ -42,7 +42,14 @@ fi
 
 ## Split the file because interproscan has problems with too many sequences
 seq_num=$(grep ">" $outputdir/Candidate_sites.with_flanking.fa |wc -l)
-seq_num=$(($seq_num-1))
+
+if [ "$seq_num" -eq "0" ]; then
+	echo "No candidates found." | tee -a $sdout
+	touch $outputdir/../All_candidates.gff3 $outputdir/../All_candidates.bed 
+	touch $outputdir/../Final_candidates.bed $outputdir/../Filtered_candidates.bed
+	exit
+fi
+
 split_fasta $outputdir/Candidate_sites.with_flanking.fa $outputdir/Candidate_sites.with_flanking.fa_chunk_0000
 
 echo -e "\nRunning interproscan domain and ORF identification..."  | tee -a $sdout

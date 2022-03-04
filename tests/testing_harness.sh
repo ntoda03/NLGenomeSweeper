@@ -163,6 +163,20 @@ test_createProfile(){
 }
 
 
+test_region_interproscan_empty(){
+    outputdir_interpro=$outdir/testing_dir/02_domain_identification
+    rm -R $outputdir_interpro 2> /dev/null
+    mkdir -p $outputdir_interpro
+    echo "" > $outputdir_interpro/Candidate_sites.with_flanking.fa
+    $programdir/../scripts/region_interproscan.sh  $outputdir_interpro 2 $programdir/../ > /dev/null 2> /dev/null
+    assertTrue "Error: region_interproscan failed" "[ -r '$outputdir_interpro/../All_candidates.gff3' ]"
+    #test1=$(cat $outputdir_interpro/All_candidates.gff3)
+    #test2=$(cat $programdir/data/02_domain_identification/All_candidates.gff3)
+    #assertEquals "Warning: region_interproscan output no what expected" "$test1" "$test2" 
+    rm -R $outputdir_interpro 2> /dev/null
+}
+
+
 test_region_interproscan(){
     outputdir_interpro=$outdir/testing_dir/02_domain_identification
     rm -R $outputdir_interpro 2> /dev/null
