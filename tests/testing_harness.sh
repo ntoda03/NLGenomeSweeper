@@ -130,6 +130,7 @@ test_classify_interpro_structure(){
 
 test_find_genome_candidates(){
     outputdir_firstpass=$outdir/testing_dir/01_candidate_identification/genome_search/first_pass
+    outname="All_candidates"
     rm -R $outputdir_firstpass 2> /dev/null
     mkdir -p $outputdir_firstpass
     cp $genome $outputdir_firstpass/genome.fa
@@ -168,6 +169,7 @@ test_region_interproscan_empty(){
     rm -R $outputdir_interpro 2> /dev/null
     mkdir -p $outputdir_interpro
     echo "" > $outputdir_interpro/Candidate_sites.with_flanking.fa
+    echo "" > $outputdir_interpro/All_candidates.bed
     $programdir/../scripts/region_interproscan.sh  $outputdir_interpro 2 $programdir/../ > /dev/null 2> /dev/null
     assertTrue "Error: region_interproscan failed" "[ -r '$outputdir_interpro/../All_candidates.gff3' ]"
     #test1=$(cat $outputdir_interpro/All_candidates.gff3)
@@ -181,6 +183,7 @@ test_region_interproscan(){
     outputdir_interpro=$outdir/testing_dir/02_domain_identification
     rm -R $outputdir_interpro 2> /dev/null
     mkdir -p $outputdir_interpro
+    cp $programdir/data/02_domain_identification/All_candidates.bed $outputdir_interpro/
     cp $programdir/data/02_domain_identification/Candidate_sites.with_flanking.fa $outputdir_interpro/Candidate_sites.with_flanking.fa
     $programdir/../scripts/region_interproscan.sh  $outputdir_interpro 2 $programdir/../ > /dev/null 2> /dev/null
     assertTrue "Error: region_interproscan failed" "[ -r '$outputdir_interpro/All_candidates.gff3' ]"
@@ -195,11 +198,11 @@ test_region_interproscan(){
 
 test_NLRGenomeSweeper(){
     outputdir_NLG=$outdir/testing_dir/NLG
-    genome=$programdir/data/02_domain_identification/Candidate_sites.with_flanking.fa
+    genome=$programdir/data/TAIR10_chr1.sample.fa
     rm -R $outputdir_NLG 2> /dev/null
     mkdir -p $outputdir_NLG
     $programdir/../NLGenomeSweeper -genome $genome -outdir $outputdir_NLG -t 2 > /dev/null 2> /dev/null
-    assertTrue "Error: NLGenomeSweeper failed" "[ -r '$outputdir_interpro/All_candidates.gff3' ]"
+    assertTrue "Error: NLGenomeSweeper failed" "[ -r '$outputdir_NLG/NLGenomeSweeper/All_candidates.gff3' ]"
     #test1=$(cat $outputdir_NLG/NLGenomeSweeper/All_candidates.gff3)
     #test2=$(cat $programdir/data/02_domain_identification/All_candidates.gff3)
     #assertEquals "Warning: NLGenomeSweeper output no what expected" "$test1" "$test2" 
