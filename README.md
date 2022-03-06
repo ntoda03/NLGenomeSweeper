@@ -1,6 +1,6 @@
 # NLGenomeSweeper
 Identification of NBS-LRR genes in genomic sequences
-v1.2.3
+v1.2.4
 
 This was created as part of the project HealthyGrape2 at the INRA.
 
