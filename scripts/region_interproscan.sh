@@ -46,8 +46,7 @@ seq_num=$(($seq_num-1))
 
 if [ "$seq_num" -eq "-1" ]; then
 	echo "No candidates found." | tee -a $sdout
-	touch $outputdir/../All_candidates.gff3 $outputdir/../All_candidates.bed 
-	touch $outputdir/../Final_candidates.bed $outputdir/../Filtered_candidates.bed
+    touch $outputdir/../All_candidates.gff3 $outputdir/../Final_candidates.bed $outputdir/../Filtered_candidates.bed
 	exit
 fi
 

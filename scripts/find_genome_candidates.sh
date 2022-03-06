@@ -1,6 +1,4 @@
 #!/bin/bash
-
-
 #
 # Find candidate domains in a genome with blast.
 #
@@ -36,6 +34,13 @@ outname="All_candidates"
 
 source $programdir/scripts/functions.sh
 
+seq_num=$(grep ">" $genome |wc -l)
+if [ "$seq_num" -eq "0" ]; then
+    echo "No sequences to search against." 1>&2
+    touch $outputdir/../../All_candidates.gff3 $outputdir/../../Final_candidates.bed $outputdir/../../Filtered_candidates.bed
+    exit 1
+fi
+
 # Blast the consensus sequence against the genome to find candidates
 if [ $format == 'prot' ]; then
         tblastn -outfmt 6 -query $profiles -db $genome -out $outputdir/genome_blast.txt \
@@ -49,13 +54,13 @@ fi
 awk '{if ($9>$10){tmp=$9;$9=$10;$10=tmp} print $2,$9,$10}' $outputdir/genome_blast.txt |sed 's/ /\t/g'  \
         | bedtools sort | bedtools merge -d 10 | awk '{print $1,$2,$3,$3-$2}' |sed 's/ /\t/g' > $outputdir/genome_blast.merge.txt
 merge_exons $outputdir/genome_blast.merge.txt $outputdir/genome_blast.merge2.txt $intron
-awk '{printf "%s:%s-%s %s:%s-%s,len,%s\n",$1,$2,$3,$1,$2,$3,$4}' $outputdir/genome_blast.merge2.txt > $outputdir/genome_blast.merge_pos.txt
-
-if [ ! -s "$outputdir/genome_blast.merge_pos.txt" ]
+seq_num=$(sed '/^[[:space:]]*$/d' $outputdir/genome_blast.merge2.txt |wc -l)
+if [ "$seq_num" -eq "0" ]
 then 
-    echo "Error: No candidates were found. Verify input sequences or consider creating a cutsom profile."
+    echo "Error: No candidates were found. Verify input sequences or consider creating a cutsom profile." 1>&2
     exit 1
 fi
+awk '{printf "%s:%s-%s %s:%s-%s,len,%s\n",$1,$2,$3,$1,$2,$3,$4}' $outputdir/genome_blast.merge2.txt > $outputdir/genome_blast.merge_pos.txt
 
 extract_seq $outputdir/genome_blast.merge_pos.txt $genome $outputdir/genome_blast.merge.fa
 
@@ -73,6 +78,7 @@ samtools faidx $profiles
 join <(awk '{print $2,$1}' $outputdir/genome_blast2.txt |sort -k1,1 |sed 's/,len,/ /g' |uniq) <(awk '{print $1,$2}' $profiles.fai |sort -k1,1) \
         |awk '((0.8*$4*3) < $3) {print $2}' |sed -r 's/(.*:.*)-/\1\t/g' | sed 's/:/\t/g' |bedtools sort |uniq > $outputdir/$outname.bed
 awk '{printf "%s:%s-%s\n",$1,$2,$3}' $outputdir/$outname.bed > $outputdir/$outname.pos.txt
+
 
 # Extract output sequences to $outputdir/$outname.fa
 extract_seq $outputdir/$outname.pos.txt $genome $outputdir/$outname.fa
