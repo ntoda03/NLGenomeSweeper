@@ -38,7 +38,7 @@ At least 2G of free memory is needed for InterProScan but more memory is better.
 
 * Python 3, version 3.5 or greater
 * blast+
-* MUSCLE aligner (some newer versions are incompatible, 3.8.1551 is known to be compatible)
+* MUSCLE aligner **(some newer versions are incompatible, 3.8.1551 is known to be compatible)**
 * SAMtools
 * bedtools
 * HMMER
